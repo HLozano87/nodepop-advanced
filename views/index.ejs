@@ -1,0 +1,64 @@
+<%- include('header') %>
+
+<div class="container mt-4">
+  <% if (!session.userId) { %>
+  <div class="alert alert-info" role="alert">
+    To view your products, you must
+    <a href="/login" class="alert-link">login</a>.
+  </div>
+  <% } else { %>
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>My Products</h2>
+    <a href="/user/new" class="btn btn-primary">Add new product</a>
+  </div>
+
+  <% if (products.length === 0) { %>
+  <div class="alert alert-warning" role="alert">
+    You have no products, add your first product!
+  </div>
+  <% } else { %>
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <% for (const p of products) { %>
+    <div class="col">
+      <div class="card h-100" id="<%= p._id %>">
+        <img
+          src="<%= p.image %>"
+          class="card-img-top"
+          alt="<%= p.name %>"
+        />
+        <div class="card-body">
+          <h5 class="card-title"><%= p.name %></h5>
+          <p class="card-text">
+            <% if (p.tags && p.tags.length > 0) { %> <% for (const tag of
+            p.tags) { %>
+            <span class="badge bg-secondary me-1"><%= tag %></span>
+            <% } %> <% } %>
+          </p>
+          <p class="card-text fw-bold text-primary">
+            <%= p.price.toFixed(2) %>€
+          </p>
+        </div>
+        <div class="card-footer bg-white d-flex justify-content-between">
+          <form
+            action="/user/delete/<%= p._id %>"
+            method="post"
+            class="d-inline"
+          >
+            <button
+              type="submit"
+              class="btn btn-sm btn-outline-danger"
+              onclick="return confirm('¿Seguro desea eliminar este producto?')"
+            >
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <% } %>
+  </div>
+
+  <% } %> <% } %>
+</div>
+
+<%- include('footer') %>

@@ -1,0 +1,44 @@
+<%- include('header') %>
+
+<div class="container">
+  <h1><%= newAccount ? "Create Account" : "Login" %></h1>
+  <form
+    action="/login<%= newAccount ? '?newAccount=true' : '' %>"
+    method="POST"
+  >
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        name="email"
+        value="<%= email %>"
+        pattern="^[a-zA-Z0-9_-]{1,}@[a-zA-Z]+(-[a-zA-Z]+)*\.(com|net|org|edu|gov|io|co|us|uk|de|fr|es|it|jp|br|ca|au|mx)$"
+        class="form-control"
+        id="email"
+        aria-describedby="emailHelp"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input
+        type="password"
+        name="password"
+        class="form-control"
+        id="password"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      <%= newAccount ? "Sign Up" : "Enter" %>
+    </button>
+  </form>
+
+  <a href="/login<%= newAccount ? '' : '?newAccount=true' %>">
+    <%= newAccount ? "¿Already have an account? Login" : "¿Create a new Account?" %>
+  </a>
+
+  <p class="text-danger"><%= error %></p>
+</div>
+
+<%- include('footer') %>
