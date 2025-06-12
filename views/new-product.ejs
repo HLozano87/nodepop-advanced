@@ -1,11 +1,11 @@
 <%-include('header') %>
 
 <div class="container">
-  <h2>New Product</h2>
+  <h2><%= __("New Product") %></h2>
 
   <form action="/user/new" method="post" enctype="multipart/form-data">
     <div class="form-control col">
-      <label for="name">Name product:</label>
+      <label for="name"><%= __("Name product") %>:</label>
       <input
         type="text"
         id="name"
@@ -16,7 +16,7 @@
     </div>
 
     <div class="form-control col">
-      <label for="price">Price (€):</label>
+      <label for="price"><%= __("Price") %> (€):</label>
       <input
         type="number"
         id="price"
@@ -27,26 +27,26 @@
     </div>
 
     <div class="form-control col">
-      <label for="tags">Tags:</label>
+      <label for="tags"><%= __("Tags") %>:</label>
       <br />
       <select name="tags" id="tags" multiple size="4" required>
-        <option value="work">Work</option>
-        <option value="lifestyle">Lifestyle</option>
-        <option value="motor">Motor</option>
-        <option value="mobile">Mobile</option>
+        <option value="work"><%= __("Work") %></option>
+        <option value="lifestyle"><%= __("Lifestyle") %></option>
+        <option value="motor"><%= __("Motor") %></option>
+        <option value="mobile"><%= __("Mobile") %></option>
       </select>
     </div>
 
     <div class="form-control">
-      <label for="imagenFile">Image Auto:</label>
+      <label for="imagenFile"><%= __("Image") %>:</label>
       <div class="image-input-container">
         <input type="file" id="imagenFile" name="imagenFile" />
       </div>
     </div>
 
     <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Upload</button>
-      <a href="/" class="btn btn-secondary">Cancel</a>
+      <button type="submit" class="btn btn-primary"><%= __("Upload") %></button>
+      <a href="/" class="btn btn-secondary"><%= __("Cancel") %></a>
     </div>
   </form>
 </div>

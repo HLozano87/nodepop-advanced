@@ -1,13 +1,13 @@
 <%- include('header') %>
 
 <div class="container">
-  <h1><%= newAccount ? "Create Account" : "Login" %></h1>
+  <h1><%= newAccount ? __("Create Account") : __("Login") %></h1>
   <form
     action="/login<%= newAccount ? '?newAccount=true' : '' %>"
     method="POST"
   >
     <div class="mb-3">
-      <label for="email" class="form-label">Email</label>
+      <label for="email" class="form-label"><%= __("Email") %></label>
       <input
         type="email"
         name="email"
@@ -20,7 +20,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
+      <label for="password" class="form-label"><%= __("Password") %></label>
       <input
         type="password"
         name="password"
@@ -30,12 +30,12 @@
     </div>
 
     <button type="submit" class="btn btn-primary">
-      <%= newAccount ? "Sign Up" : "Enter" %>
+      <%= newAccount ? __("Sign Up") : __("Enter") %>
     </button>
   </form>
 
   <a href="/login<%= newAccount ? '' : '?newAccount=true' %>">
-    <%= newAccount ? "¿Already have an account? Login" : "¿Create a new Account?" %>
+    <%= newAccount ? __("¿Already have an account? Login") : __("¿Create a new Account?") %>
   </a>
 
   <p class="text-danger"><%= error %></p>

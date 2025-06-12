@@ -32,17 +32,24 @@
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <% if(session.userId) { %>
             <li class="nav-item">
-              <a class="nav-link" href="/user/new">New Product</a>
+              <a class="nav-link" href="/user/new"><%= __("New Product") %></a>
             </li>
             <% } %>
           </ul>
+          <div>
+            <% getLocales().forEach( locale => { %>
+            <a href="/lang-change/<%= locale %> ">
+              <img src="/images-lang/<%= locale %>.png" alt="<%= locale %>" />
+            </a>
+            <% }) %>
+          </div>
           <% if(!session.userId) { %>
-          <a href="/login" class="btn btn-success">Login</a>
+          <a href="/login" class="btn btn-success"><%= __("Login") %></a>
           <% } else { %>
-          <a href="/logout" class="btn btn-outline-danger">Logout</a>
+          <a href="/logout" class="btn btn-outline-danger"
+            ><%= __("Logout") %></a
+          >
           <% } %>
         </div>
       </div>
     </nav>
-  </body>
-</html>

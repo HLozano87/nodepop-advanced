@@ -14,6 +14,8 @@ import * as productController from "./controllers/productController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
 import uploadFile from "./lib/uploadConfigure.js";
+import i18n from "./lib/i18nConfigure.js";
+import changeLang from "./controllers/langLocaleController.js";
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -38,6 +40,8 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
 app.use(sessionManager.useSessionUsersInViews);
+app.use(i18n.init)
+app.get('/lang-change/:locale', changeLang)
 
 /**
  * Routes definitions

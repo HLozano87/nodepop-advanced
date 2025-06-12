@@ -4,20 +4,20 @@
   <% if (!session.userId) { %>
 
     <div class="alert alert-info" role="alert">
-      To view your products, you must
+      <%= __("To view your products, you must") %>
       <a href="/login" class="alert-link">login</a>.
     </div>
   <% } else { %>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2>My Products</h2>
-      <a href="/user/new" class="btn btn-primary">Add new product</a>
+      <h2><%= __("My Products") %></h2>
+      <a href="/user/new" class="btn btn-primary"><%= __("Add new product") %></a>
     </div>
 
     <% if (products.length === 0) { %>
 
       <div class="alert alert-warning" role="alert">
-        You have no products, add your first product!
+        <%= __("You have no products, add your first product!") %>
       </div>
     <% } else { %>
 
@@ -55,9 +55,9 @@
                   <button
                     type="submit"
                     class="btn btn-sm btn-outline-danger"
-                    onclick="return confirm('¿Seguro desea eliminar este producto?')"
+                    onclick="return confirm('<%= __(`¿Are you sure you want to remove?`) %>')"
                   >
-                    <i class="bi bi-trash"></i> Delete
+                    <i class="bi bi-trash"></i> <%= __("Delete") %>
                   </button>
                 </form>
               </div>
