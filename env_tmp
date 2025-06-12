@@ -1,3 +1,3 @@
 SECRET_SESSION='Here secret key'
 TIME_LIFE_SESSION=Here time in ms
-MONGO_URL='Here path to mongodb'
+MONGO_URI='Here path to mongodb'

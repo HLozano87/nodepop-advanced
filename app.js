@@ -13,6 +13,7 @@ import * as homeController from "./controllers/homeController.js";
 import * as productController from "./controllers/productController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
+import uploadFile from "./lib/uploadConfigure.js";
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -53,6 +54,7 @@ app.get("/user/new", sessionManager.guard, productController.index);
 app.post(
   "/user/new",
   sessionManager.guard,
+  uploadFile.single("imagenFile"),
   productController.validateParams,
   productController.createProduct
 );

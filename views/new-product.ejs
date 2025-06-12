@@ -3,7 +3,7 @@
 <div class="container">
   <h2>New Product</h2>
 
-  <form action="/user/new" method="post">
+  <form action="/user/new" method="post" enctype="multipart/form-data">
     <div class="form-control col">
       <label for="name">Name product:</label>
       <input
@@ -38,9 +38,9 @@
     </div>
 
     <div class="form-control">
-      <label for="image">Image Auto:</label>
+      <label for="imagenFile">Image Auto:</label>
       <div class="image-input-container">
-        <input type="file" id="image" name="image" />
+        <input type="file" id="imagenFile" name="imagenFile" />
       </div>
     </div>
 

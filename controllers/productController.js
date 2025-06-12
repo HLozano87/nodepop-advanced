@@ -11,7 +11,7 @@ export const validateParams = [
   body("price")
     .custom((value) => value > 0)
     .withMessage("El precio debe ser un número mayor a 0"),
-  body("image")
+  body("imagenFile")
     .optional()
     .isString()
     .withMessage("La URL de la imagen debe ser válida"),
@@ -33,23 +33,20 @@ export const index = (req, res, next) => {
 
 export const createProduct = async (req, res, next) => {
   try {
-    const randomImage = `https://picsum.photos/300/200?random=${Math.floor(
-      Math.random() * 1000
-    )}`;
-    const { name, price, image, tags } = req.body;
+    const { name, price, tags } = req.body;
+    const image = req.file?.filename
     const userId = req.session.userId;
 
-    const productImage = image || randomImage;
     const product = new Product({
       name,
       price,
-      image: productImage,
+      image,
       tags,
       owner: userId,
     });
 
     await product.save();
-    console.log(product);
+
     res.redirect("/");
   } catch (error) {
     next(error);
