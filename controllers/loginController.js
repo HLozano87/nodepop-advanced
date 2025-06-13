@@ -32,7 +32,7 @@ export async function loginUser(req, res, next) {
       return res.redirect("/");
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email });
 
     if (!user || !(await user.comparePassword(password))) {
       res.locals.error = "Credentials not valid.";
