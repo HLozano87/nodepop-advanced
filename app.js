@@ -43,11 +43,8 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
  */
 app.get("/api/products", apiProductsController.listProducts);
 app.get("/api/products/:productId", apiProductsController.getOne);
-app.post(
-  "/api/products",
-  uploadFile.single("image"),
-  apiProductsController.newProduct
-);
+app.post("/api/products", uploadFile.single("image"), apiProductsController.newProduct);
+app.put("/api/products/:productId", uploadFile.single("image"), apiProductsController.updateProduct);
 
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
