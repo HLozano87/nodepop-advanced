@@ -13,6 +13,7 @@ import * as homeController from "./controllers/homeController.js";
 import * as productController from "./controllers/productController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
+import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
 import changeLang from "./controllers/langLocaleController.js";
@@ -37,6 +38,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
+/**
+ * API Routes
+ */
+app.get('/api/products', apiProductsController.listProducts)
+
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
 app.use(sessionManager.useSessionUsersInViews);
@@ -44,7 +50,7 @@ app.use(i18n.init)
 app.get('/lang-change/:locale', changeLang)
 
 /**
- * Routes definitions
+ * Web Routes definitions
  */
 app.get("/", homeController.index);
 
