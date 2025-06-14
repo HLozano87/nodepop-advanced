@@ -1,4 +1,6 @@
 import Product from "../../models/Product.js";
+import { unlink } from "node:fs/promises";
+import path from "node:path";
 
 export async function listProducts(req, res, next) {
   try {
@@ -50,7 +52,7 @@ export async function listProducts(req, res, next) {
   }
 }
 
-export async function getOne(req, res, next) {
+export async function getProduct(req, res, next) {
   try {
     const productId = req.params.productId;
 
@@ -86,7 +88,26 @@ export async function updateProduct(req, res, next) {
     
     const updatedProduct = await Product.findByIdAndUpdate(productId, productData, { new: true })
 
-    res.status(200).json({result: updatedProduct})
+    res.json({result: updatedProduct})
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function deleteProduct(req, res, next) {
+  try {
+    const productId = req.params.productId
+    
+    const product = await Product.findById(productId)
+    
+    if(product.image) {
+      await unlink(path.join(process.cwd(), "public", "uploads", product.image))
+    }
+
+    await Product.deleteOne({_id: productId})
+
+    res.json()
 
   } catch (error) {
     next(error)

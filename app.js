@@ -42,9 +42,10 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
  * API Routes
  */
 app.get("/api/products", apiProductsController.listProducts);
-app.get("/api/products/:productId", apiProductsController.getOne);
+app.get("/api/products/:productId", apiProductsController.getProduct);
 app.post("/api/products", uploadFile.single("image"), apiProductsController.newProduct);
 app.put("/api/products/:productId", uploadFile.single("image"), apiProductsController.updateProduct);
+app.delete("/api/products/:productId", apiProductsController.deleteProduct)
 
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
