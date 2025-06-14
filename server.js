@@ -20,5 +20,6 @@ const server = http.createServer(app);
 server.on("error", (error) => console.error("Error: ", error));
 server.on("listening", () => {
   console.log(`Server started on http://localhost:${port}`);
+  console.log(`Docs started on http://localhost:${port}/api-docs`);
 });
 server.listen(port);

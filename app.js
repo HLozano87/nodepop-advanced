@@ -17,6 +17,7 @@ import * as apiProductsController from "./controllers/api/apiProductsController.
 import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
 import changeLang from "./controllers/langLocaleController.js";
+import swaggerMiddleware from "./lib/swaggerMiddleware.js";
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -41,6 +42,7 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
 /**
  * API Routes
  */
+
 app.get("/api/products", apiProductsController.listProducts);
 app.get("/api/products/:productId", apiProductsController.getProduct);
 app.post("/api/products", uploadFile.single("image"), apiProductsController.newProduct);
@@ -77,6 +79,7 @@ app.post(
   sessionManager.guard,
   productController.deleteProduct
 );
+app.use('/api-docs', swaggerMiddleware)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

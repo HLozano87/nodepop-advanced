@@ -1,0 +1,185 @@
+openapi: 3.0.4
+info:
+  title: Nodepop-API
+  version: 1.0.0
+  description: API RESTful para la gestión de productos, incluyendo relación con usuarios.
+
+servers:
+  - url: http://localhost:3000/api/products
+
+paths:
+  /api/products:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Lista de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+
+    post:
+      summary: Crear un nuevo producto
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - name
+                - price
+                - tags
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                  minimum: 1
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    enum: [work, mobile, motor, lifestyle]
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Producto creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+
+  /api/products/{productId}:
+    get:
+      summary: Obtener un producto por ID
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+
+    put:
+      summary: Actualizar un producto
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                price:
+                  type: number
+                  format: float
+                  minimum: 1
+                tags:
+                  type: array
+                  items:
+                    type: string
+                    enum: [work, mobile, motor, lifestyle]
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Producto actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: Producto no encontrado
+
+    delete:
+      summary: Eliminar un producto
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Producto eliminado correctamente
+        '404':
+          description: Producto no encontrado
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "60f5c5fc8d3e3c0015d6f9e8"
+        name:
+          type: string
+          example: "Zapatos de cuero"
+        price:
+          type: number
+          format: float
+          minimum: 1
+          example: 99.99
+        image:
+          type: string
+          format: uri
+          example: "https://miapp.com/uploads/zapatos.jpg"
+        tags:
+          type: array
+          items:
+            type: string
+            enum: [work, mobile, motor, lifestyle]
+          example: ["motor", "lifestyle"]
+        owner:
+          $ref: '#/components/schemas/User'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "609e128f2d1f9c0015e8df67"
+        email:
+          type: string
+          format: email
+          example: "usuario@example.com"
