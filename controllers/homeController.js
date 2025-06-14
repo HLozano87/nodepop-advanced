@@ -10,16 +10,12 @@ export const index = async (req, res, next) => {
     
     const limit = parseInt(req.query.limit);
     const skip = parseInt(req.query.skip);
-    
     const sort = req.query.sort;
-    const fields = req.query.fields;
     
-    const filter = {};
+    const filter = {
+      owner: userId
+    };
     
-    if(userId){
-      filter.owner = userId
-    }
-
     if (filterName) {
       filter.name = filterName;
     }
@@ -31,16 +27,7 @@ export const index = async (req, res, next) => {
       filter.tags = filterTags;
     }
 
-    const products = await Product.list(filter, limit, skip, sort, fields);
-    const withCount = req.query.count === "true";
-    const result = { products };
-
-    if (withCount) {
-      const count = await Product.countDocuments(filter);
-      result.count = count;
-      res.locals.count = count
-    }
-    
+    const products = await Product.list(filter, limit, skip, sort);
     res.locals.products = products
   
     res.render("index");

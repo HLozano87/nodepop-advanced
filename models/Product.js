@@ -14,7 +14,6 @@ const productSchema = new Schema(
   }
 );
 productSchema.statics.list = function (filter, limit, skip, sort, fields) {
-  console.log(filter);
   const query = Product.find(filter);
   query.limit(limit);
   query.skip(skip);
