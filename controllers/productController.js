@@ -11,7 +11,7 @@ export const validateParams = [
   body("price")
     .custom((value) => value > 0)
     .withMessage("El precio debe ser un número mayor a 0"),
-  body("imagenFile")
+  body("image")
     .optional()
     .isString()
     .withMessage("La URL de la imagen debe ser válida"),

@@ -33,7 +33,7 @@ export async function listProducts(req, res, next) {
     }
 
     if (filterTags) {
-      filter.tags = filterTags
+      filter.tags = filterTags;
     }
 
     const products = await Product.list(filter, limit, skip, sort, fields);
@@ -44,9 +44,35 @@ export async function listProducts(req, res, next) {
       result.count = count;
     }
 
-    res.json(result)
+    res.json(result);
   } catch (error) {
     next(error);
   }
+}
 
+export async function getOne(req, res, next) {
+  try {
+    const productId = req.params.productId;
+
+    const product = await Product.findById(productId);
+
+    res.json({ result: product });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function newProduct(req, res, next) {
+  try {
+    const productData = req.body;
+
+    const product = new Product(productData);
+    product.image = req.file?.filename;
+
+    const saveProduct = await product.save();
+
+    res.status(201).json({ result: saveProduct });
+  } catch (error) {
+    next(error);
+  }
 }
