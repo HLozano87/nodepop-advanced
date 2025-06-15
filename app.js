@@ -14,6 +14,7 @@ import * as productController from "./controllers/productController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
+import { loginAuthJWT } from "./controllers/api/apiLoginController.js";
 import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
 import changeLang from "./controllers/langLocaleController.js";
@@ -43,6 +44,7 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
  * API Routes
  */
 
+app.post("/api/login", loginAuthJWT)
 app.get("/api/products", apiProductsController.listProducts);
 app.get("/api/products/:productId", apiProductsController.getProduct);
 app.post("/api/products", uploadFile.single("image"), apiProductsController.newProduct);
