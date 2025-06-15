@@ -88,12 +88,23 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+
+  // Manage validation errors
+  if (err.array) {
+    err.message =
+      "Invalid request: " + err.array()
+        .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
+        .join(", ");
+    err.status = 422;
+  }
+
+  res.status(err.status || 500);
+
   // For API errors response must be JSON
   if (req.url.startsWith("/api/")) {
     res.json({ error: err.message });
     return;
   }
-  res.status(err.status || 500);
 
   // set locals, only providing error in development
   res.locals.message = err.message;

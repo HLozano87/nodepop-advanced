@@ -21,7 +21,7 @@ export const validateParams = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.render("form", { errors: errors.array().map((e) => e.msg) });
+      return next(errors)
     }
     next();
   },
