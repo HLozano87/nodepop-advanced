@@ -1,3 +1,4 @@
+import createHttpError from "http-errors";
 import Product from "../../models/Product.js";
 import { unlink } from "node:fs/promises";
 import path from "node:path";
@@ -24,7 +25,7 @@ export async function listProducts(req, res, next) {
     const withCount = req.query.count === "true";
 
     const filter = {
-      // TODO API AUTHENTICATION
+      owner: userId,
     };
 
     if (filterName) {
@@ -55,8 +56,9 @@ export async function listProducts(req, res, next) {
 export async function getProduct(req, res, next) {
   try {
     const productId = req.params.productId;
+    const userId = req.userId;
 
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({ _id: productId, owner: userId });
 
     res.json({ result: product });
   } catch (error) {
@@ -70,6 +72,7 @@ export async function newProduct(req, res, next) {
 
     const product = new Product(productData);
     product.image = req.file?.filename;
+    product.owner = req.userId;
 
     const saveProduct = await product.save();
 
@@ -79,37 +82,52 @@ export async function newProduct(req, res, next) {
   }
 }
 
-
 export async function updateProduct(req, res, next) {
   try {
-    const productId = req.params.productId
-    const productData = req.body
-    productData.image = req.file?.filename
-    
-    const updatedProduct = await Product.findByIdAndUpdate(productId, productData, { new: true })
+    const productId = req.params.productId;
+    const productData = req.body;
+    const userId = req.userId;
+    productData.image = req.file?.filename;
 
-    res.json({result: updatedProduct})
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId, owner: userId },
+      productData,
+      { new: true }
+    );
 
+    res.json({ result: updatedProduct });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
 export async function deleteProduct(req, res, next) {
   try {
-    const productId = req.params.productId
-    
-    const product = await Product.findById(productId)
-    
-    if(product.image) {
-      await unlink(path.join(process.cwd(), "public", "uploads", product.image))
+    const productId = req.params.productId;
+    const userId = req.userId
+
+    const product = await Product.findById(productId);
+
+    if(!product) {
+      console.warn(`WARNING! user ${userId} is trying to delete non existing product`)
+      return next(createHttpError(404))
     }
 
-    await Product.deleteOne({_id: productId})
+    if (product.owner.toString() !== userId) {
+      console.warn(`WARNING! user ${userId} is trying to delete products of other users!`);
+      return next(createHttpError(401));
+    }
 
-    res.json()
+    if (product.image) {
+      await unlink(
+        path.join(process.cwd(), "public", "uploads", product.image)
+      );
+    }
 
+    await Product.deleteOne({ _id: productId, owner: userId });
+
+    res.json();
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
