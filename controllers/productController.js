@@ -1,5 +1,6 @@
 import { body, validationResult } from "express-validator";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 export const validateParams = [
   body("name")
@@ -36,19 +37,19 @@ export const createProduct = async (req, res, next) => {
     const { name, price, tags } = req.body;
     const image = req.file?.filename;
     const userId = req.session.userId;
+    const user = await User.findById(userId)
 
     const product = new Product({
       name,
       price,
       image,
       tags,
-      owner: userId,
+      owner: userId
     });
-
     await product.save();
-    // TODO USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
-    // Transporter: Enviar email a usuario
-    // user.sendEmail('Created new product', 'Congratulations you have created a successful new product.')
+    
+    // Send email transactional
+    user.sendEmail('Created new product', `Congratulations ${user.name} you have created a successful new product.`)
 
     res.redirect("/");
   } catch (error) {
@@ -60,9 +61,15 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const userId = req.session.userId;
     const productId = req.params.productId;
+    const product = await Product.findById(productId)
+    const user = await User.findById(userId);
     await Product.deleteOne({ _id: productId, owner: userId });
-    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
-    // user.sendEmail('Deleted success', 'INFO user: you have successfully deleted a product.')
+
+    // Send email transactional
+    user.sendEmail(
+      `You have successfully deleted ${product.name}`,
+      `Hello ${user.name} you have successfully deleted ${product.name}.`
+    );
 
     res.redirect("/");
   } catch (error) {
