@@ -2,6 +2,7 @@ import User from "../models/User.js";
 
 export const index = (req, res, next) => {
   res.locals.error = "";
+  res.locals.name = "";
   res.locals.email = "";
   res.locals.newAccount = req.query.newAccount === "true";
   res.render("login");
@@ -9,7 +10,7 @@ export const index = (req, res, next) => {
 
 export async function loginUser(req, res, next) {
   try {
-    const { email, password } = req.body;
+    const { name, email, password, confirmPassword } = req.body;
     const redir = req.query.redir;
     const newAccount = req.query.newAccount === "true";
 
@@ -22,13 +23,22 @@ export async function loginUser(req, res, next) {
 
     if (newAccount) {
       const userId = req.session.userId;
+      if (!confirmPassword || password !== confirmPassword) {
+        res.locals.error = "Passwords not match.";
+        res.locals.name = name;
+        res.locals.email = email;
+        res.locals.newAccount = true;
+        return res.render("login");
+      }
       const user = new User({
+        name,
         email,
         password: await User.hashPassword(password),
         owner: userId,
       });
       await user.save();
       req.session.userId = user.id;
+      user.sendEmail("Bienvenido", `Bienvenido a Nodepop ${user.name}.`);
       return res.redirect("/");
     }
 
@@ -37,13 +47,10 @@ export async function loginUser(req, res, next) {
     if (!user || !(await user.comparePassword(password))) {
       res.locals.error = "Credentials not valid.";
       res.locals.email = email;
-      res.locals.newAccount = newAccount;
+      res.locals.newAccount = false;
       return res.render("login");
     }
     req.session.userId = user.id;
-
-    // Prueba de envio un email al usuario al hacer login
-    user.sendEmail("Bienvenido", `Bienvenido a Nodeapp ${user.name}.`);
 
     res.redirect(redir ? redir : "/");
   } catch (error) {

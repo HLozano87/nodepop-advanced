@@ -6,6 +6,12 @@
     action="/login<%= newAccount ? '?newAccount=true' : '' %>"
     method="POST"
   >
+    <% if (newAccount) { %>
+      <div class="mb-3">
+        <label for="name" class="form-label"><%= __("Name") %></label>
+        <input type="text" class="form-control" name="name" id="name" value="<%= name %>">
+      </div>
+    <% } %>
     <div class="mb-3">
       <label for="email" class="form-label"><%= __("Email") %></label>
       <input
@@ -28,6 +34,13 @@
         id="password"
       />
     </div>
+
+    <% if (newAccount) { %>
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label"><%= __("Confirm Password") %></label>
+        <input type="password" name="confirmPassword" class="form-control" id="confirmPassword" />
+      </div>
+    <% } %>
 
     <button type="submit" class="btn btn-primary">
       <%= newAccount ? __("Sign Up") : __("Enter") %>

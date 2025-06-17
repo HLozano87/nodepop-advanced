@@ -4,9 +4,9 @@ import { createTransport, sendEmail, generatePreviewURL } from "../lib/emailMana
 
 const userSchema = new Schema({
   // TODO name user and implement front for using with sendEmail
-  name: {type: String},
+  name: { type: String },
   email: { type: String, unique: true },
-  password: String,
+  password: { type: String },
 });
 
 userSchema.statics.hashPassword = (clearPassword) => {
