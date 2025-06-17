@@ -4,6 +4,7 @@
 import "dotenv/config";
 import http from "node:http";
 import app from "./app.js";
+import { setupWebSocketServer } from "./webSocketServer.js";
 
 const port = process.env.PORT || 3000;
 
@@ -12,6 +13,8 @@ const port = process.env.PORT || 3000;
  */
 
 const server = http.createServer(app);
+
+setupWebSocketServer(server)
 
 /**
  * Listen on provided port and http event listening, on all network interfaces.
