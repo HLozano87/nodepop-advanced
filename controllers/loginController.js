@@ -42,6 +42,9 @@ export async function loginUser(req, res, next) {
     }
     req.session.userId = user.id;
 
+    // Prueba de envio un email al usuario al hacer login
+    user.sendEmail("Bienvenido", `Bienvenido a Nodeapp ${user.name}.`);
+
     res.redirect(redir ? redir : "/");
   } catch (error) {
     next(error);

@@ -34,7 +34,7 @@ export const index = (req, res, next) => {
 export const createProduct = async (req, res, next) => {
   try {
     const { name, price, tags } = req.body;
-    const image = req.file?.filename
+    const image = req.file?.filename;
     const userId = req.session.userId;
 
     const product = new Product({
@@ -46,6 +46,9 @@ export const createProduct = async (req, res, next) => {
     });
 
     await product.save();
+    // TODO USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
+    // Transporter: Enviar email a usuario
+    // user.sendEmail('Created new product', 'Congratulations you have created a successful new product.')
 
     res.redirect("/");
   } catch (error) {
@@ -58,6 +61,8 @@ export const deleteProduct = async (req, res, next) => {
     const userId = req.session.userId;
     const productId = req.params.productId;
     await Product.deleteOne({ _id: productId, owner: userId });
+    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
+    // user.sendEmail('Deleted success', 'INFO user: you have successfully deleted a product.')
 
     res.redirect("/");
   } catch (error) {

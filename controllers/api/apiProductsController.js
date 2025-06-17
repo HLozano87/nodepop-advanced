@@ -75,6 +75,7 @@ export async function newProduct(req, res, next) {
     product.owner = req.userId;
 
     const saveProduct = await product.save();
+    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
 
     res.status(201).json({ result: saveProduct });
   } catch (error) {
@@ -94,7 +95,7 @@ export async function updateProduct(req, res, next) {
       productData,
       { new: true }
     );
-
+    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
     res.json({ result: updatedProduct });
   } catch (error) {
     next(error);
@@ -104,17 +105,21 @@ export async function updateProduct(req, res, next) {
 export async function deleteProduct(req, res, next) {
   try {
     const productId = req.params.productId;
-    const userId = req.userId
+    const userId = req.userId;
 
     const product = await Product.findById(productId);
 
-    if(!product) {
-      console.warn(`WARNING! user ${userId} is trying to delete non existing product`)
-      return next(createHttpError(404))
+    if (!product) {
+      console.warn(
+        `WARNING! user ${userId} is trying to delete non existing product`
+      );
+      return next(createHttpError(404));
     }
 
     if (product.owner.toString() !== userId) {
-      console.warn(`WARNING! user ${userId} is trying to delete products of other users!`);
+      console.warn(
+        `WARNING! user ${userId} is trying to delete products of other users!`
+      );
       return next(createHttpError(401));
     }
 
@@ -125,6 +130,7 @@ export async function deleteProduct(req, res, next) {
     }
 
     await Product.deleteOne({ _id: productId, owner: userId });
+    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
 
     res.json();
   } catch (error) {
