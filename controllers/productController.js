@@ -37,7 +37,6 @@ export const createProduct = async (req, res, next) => {
     const { name, price, tags } = req.body;
     const image = req.file?.filename;
     const userId = req.session.userId;
-    const user = await User.findById(userId)
 
     const product = new Product({
       name,
@@ -47,9 +46,6 @@ export const createProduct = async (req, res, next) => {
       owner: userId
     });
     await product.save();
-    
-    // Send email transactional
-    user.sendEmail('Created new product', `Congratulations ${user.name} you have created a successful new product.`)
 
     res.redirect("/");
   } catch (error) {
