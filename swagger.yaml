@@ -83,6 +83,26 @@ paths:
               schema:
                 $ref: "#/components/schemas/Product"
 
+  /api/tags:
+    get:
+      summary: Obtener lista de tags disponibles
+      tags:
+        - products
+      security:
+        - Authorization: []
+      responses:
+        "200":
+          description: Lista de tags válidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  enum: [work, mobile, motor, lifestyle]
+        "401":
+          description: No autorizado - token no válido o ausente
+
   /api/products/{productId}:
     get:
       summary: Obtener un producto por ID
@@ -194,6 +214,14 @@ components:
           type: string
           format: uri
           example: "1750075050635-name.jpg"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-06-23T14:30:00.000Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-06-23T15:45:00.000Z"
 
     Login:
       type: object

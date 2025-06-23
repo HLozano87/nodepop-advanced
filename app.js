@@ -47,6 +47,7 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
 
 app.post("/api/login", loginAuthJWT)
 app.get("/api/products",               jwtGuard, apiProductsController.listProducts);
+app.get("/api/tags",                   jwtGuard, apiProductsController.getTags)
 app.get("/api/products/:productId",    jwtGuard, apiProductsController.getProduct);
 app.post("/api/products",              jwtGuard, uploadFile.single("image"), apiProductsController.newProduct);
 app.put("/api/products/:productId",    jwtGuard, uploadFile.single("image"), apiProductsController.updateProduct);

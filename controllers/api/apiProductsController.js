@@ -66,6 +66,16 @@ export async function getProduct(req, res, next) {
   }
 }
 
+export function getTags(req, res, next) {
+  try {
+    const tags = Product.getTags();
+
+    res.json({ result: tags });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function newProduct(req, res, next) {
   try {
     const productData = req.body;
@@ -75,7 +85,6 @@ export async function newProduct(req, res, next) {
     product.owner = req.userId;
 
     const saveProduct = await product.save();
-    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
 
     res.status(201).json({ result: saveProduct });
   } catch (error) {
@@ -90,12 +99,10 @@ export async function updateProduct(req, res, next) {
     const userId = req.userId;
     productData.image = req.file?.filename;
 
-    const updatedProduct = await Product.findOneAndUpdate(
-      { _id: productId, owner: userId },
-      productData,
-      { new: true }
+    const updatedProduct = await Product.findOneAndUpdate( 
+      { _id: productId, owner: userId }, productData, { new: true }
     );
-    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
+
     res.json({ result: updatedProduct });
   } catch (error) {
     next(error);
@@ -127,10 +134,10 @@ export async function deleteProduct(req, res, next) {
       await unlink(
         path.join(process.cwd(), "public", "uploads", product.image)
       );
+      await unlink(imagePath);
     }
 
     await Product.deleteOne({ _id: productId, owner: userId });
-    // USAR AQUI EL SERVICIO DEL ENVIO DE EMAIL TRANSACCIONAL
 
     res.json();
   } catch (error) {
