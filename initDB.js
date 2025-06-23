@@ -16,27 +16,32 @@ if (answer.toLowerCase() !== "y") {
   process.exit();
 }
 
-const userId = await initUsers();
-await initDBNodepop(userId);
+
+const users = await initUsers();
+await initDBNodepop(users);
+
+const allUsers = await User.find()
+for (const user of allUsers) {
+  const count = await Product.countDocuments({owner: user._id})
+  console.log(`User: "${user.name}" has ${count} products.`);
+}
+
 await connection.close();
 
-async function initDBNodepop(userId) {
+async function initDBNodepop(users) {
   const chance = new Chance();
   const products = await Product.deleteMany();
   console.log(`Delete ${products.deletedCount} products.`);
 
-  const availableTags = ["Work", "LifeStyle", "Motor", "Mobile"];
+  const availableTags = Product.getTags();
   const newProduct = Array.from({ length: 10 }, () => ({
     name: chance.word(),
-    price: chance.integer({ min: 1, max: 3000 }),
-    image: `https://picsum.photos/id/${Math.floor(
-      Math.random() * 1084
-    )}/300/200`,
+    price: chance.floating({ min: 1, max: 3000 }),
     tags: chance.pickset(
       availableTags,
       chance.integer({ min: 1, max: availableTags.length })
     ),
-    owner: userId,
+    owner: chance.pickone(users)._id,
   }));
   const insertProduct = await Product.insertMany(newProduct);
   console.log(
@@ -49,10 +54,11 @@ async function initUsers() {
   console.log(`Delete ${users.deletedCount} users.`);
 
   const insertUsers = await User.insertMany([
+    { name: "Admin", email: "admin@example.com", password: await User.hashPassword("1234") },
     { name: "User", email: "user@example.com", password: await User.hashPassword("1234") },
   ]);
   console.log(`Insert ${insertUsers.length} users.`);
-  return insertUsers[0]._id;
+  return insertUsers;
 }
 
 async function ask(question) {

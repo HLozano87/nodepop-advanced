@@ -23,6 +23,11 @@ productSchema.statics.list = function (filter, limit, skip, sort, fields) {
   return query.exec();
 };
 
+const TAGS = ["lifestyle", "motor", "work", "mobile"]
+productSchema.statics.getTags = function () {
+  return TAGS
+}
+
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;
