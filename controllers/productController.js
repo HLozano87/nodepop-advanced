@@ -1,6 +1,8 @@
 import { body, validationResult } from "express-validator";
 import Product from "../models/Product.js";
 import User from "../models/User.js";
+import path from "node:path"
+import { unlink } from "node:fs/promises";
 
 export const validateParams = [
   body("name")
@@ -17,12 +19,12 @@ export const validateParams = [
     .isString()
     .withMessage("La URL de la imagen debe ser válida"),
   body("tags")
-    .isString()
+    .isArray()
     .withMessage("Las etiquetas deben ser un arreglo de strings"),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return next(errors)
+      return next(errors);
     }
     next();
   },
@@ -43,7 +45,7 @@ export const createProduct = async (req, res, next) => {
       price,
       image,
       tags,
-      owner: userId
+      owner: userId,
     });
     await product.save();
 
@@ -57,10 +59,16 @@ export const deleteProduct = async (req, res, next) => {
   try {
     const userId = req.session.userId;
     const productId = req.params.productId;
-    const product = await Product.findById(productId)
+    const product = await Product.findById(productId);
     const user = await User.findById(userId);
-    await Product.deleteOne({ _id: productId, owner: userId });
 
+    if (product.image) {
+      const imagePath = path.join(process.cwd(), "public", "uploads", product.image)
+      await unlink(imagePath);
+    }
+    
+    await Product.deleteOne({ _id: productId, owner: userId });
+    
     // Send email transactional
     user.sendEmail(
       `You have successfully deleted ${product.name}`,
