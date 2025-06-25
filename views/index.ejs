@@ -22,33 +22,33 @@
     <% } else { %>
 
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        <% for (const p of products) { %>
+        <% for (const product of products) { %>
           <div class="col">
-            <div class="card h-100" id="<%= p._id %>">
+            <div class="card h-100" id="<%= product._id %>">
               <img
-                src="<%= p.image ? `/uploads/${p.image}` : 'https://placehold.co/600x400.png'%>"
+                src="<%= product.image ? `/uploads/${product.image}` : 'https://placehold.co/600x400.png'%>"
                 class="card-img-top"
-                alt="<%= p.name %>"
+                alt="<%= product.name %>"
               />
               <div class="card-body">
-                <h5 class="card-title"><%= p.name %></h5>
+                <h5 class="card-title"><%= product.name %></h5>
 
-                <% if (p.tags && p.tags.length > 0) { %>
+                <% if (product.tags && product.tags.length > 0) { %>
                   <p class="card-text">
-                    <% for (const tag of p.tags) { %>
+                    <% for (const tag of product.tags) { %>
                       <span class="badge bg-secondary me-1"><%= tag %></span>
                     <% } %>
                   </p>
                 <% } %>
 
                 <p class="card-text fw-bold text-primary">
-                  <%= p.price.toFixed(2) %>€
+                  <%= product.price.toFixed(2) %>€
                 </p>
               </div>
 
               <div class="card-footer bg-white d-flex justify-content-between">
                 <form
-                  action="/user/delete/<%= p._id %>"
+                  action="/user/delete/<%= product._id %>"
                   method="post"
                   class="d-inline"
                 >

@@ -16,13 +16,12 @@ if (answer.toLowerCase() !== "y") {
   process.exit();
 }
 
-
 const users = await initUsers();
 await initDBNodepop(users);
 
-const allUsers = await User.find()
+const allUsers = await User.find();
 for (const user of allUsers) {
-  const count = await Product.countDocuments({owner: user._id})
+  const count = await Product.countDocuments({ owner: user._id });
   console.log(`User: "${user.name}" has ${count} products.`);
 }
 
@@ -54,8 +53,16 @@ async function initUsers() {
   console.log(`Delete ${users.deletedCount} users.`);
 
   const insertUsers = await User.insertMany([
-    { name: "Admin", email: "admin@example.com", password: await User.hashPassword("1234") },
-    { name: "User", email: "user@example.com", password: await User.hashPassword("1234") },
+    {
+      name: "Admin",
+      email: "admin@example.com",
+      password: await User.hashPassword("1234"),
+    },
+    {
+      name: "User",
+      email: "user@example.com",
+      password: await User.hashPassword("1234"),
+    },
   ]);
   console.log(`Insert ${insertUsers.length} users.`);
   return insertUsers;

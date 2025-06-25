@@ -14,7 +14,7 @@ const port = process.env.PORT || 3000;
 
 const server = http.createServer(app);
 
-setupWebSocketServer(server)
+setupWebSocketServer(server);
 
 /**
  * Listen on provided port and http event listening, on all network interfaces.

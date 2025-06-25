@@ -6,11 +6,11 @@ const productSchema = new Schema(
     owner: { type: Schema.Types.ObjectId, ref: "User", index: true },
     price: { type: Number, min: 1, required: true },
     image: { type: String },
-    tags: { type: [ String ], required: true },
+    tags: { type: [String], required: true },
   },
   {
     collection: "productos",
-    timestamps: true
+    timestamps: true,
   }
 );
 productSchema.statics.list = function (filter, limit, skip, sort, fields) {
@@ -23,10 +23,10 @@ productSchema.statics.list = function (filter, limit, skip, sort, fields) {
   return query.exec();
 };
 
-const TAGS = ["lifestyle", "motor", "work", "mobile"]
+const TAGS = ["lifestyle", "motor", "work", "mobile"];
 productSchema.statics.getTags = function () {
-  return TAGS
-}
+  return TAGS;
+};
 
 const Product = mongoose.model("Product", productSchema);
 

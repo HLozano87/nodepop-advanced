@@ -15,7 +15,7 @@ import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
 import { loginAuthJWT } from "./controllers/api/apiLoginController.js";
-import { jwtGuard }  from "./lib/jwtAuthMiddleware.js";
+import { jwtGuard } from "./lib/jwtAuthMiddleware.js";
 import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
 import changeLang from "./controllers/langLocaleController.js";
@@ -45,13 +45,27 @@ app.use(express.static(path.join(import.meta.dirname, "public")));
  * API Routes
  */
 
-app.post("/api/login", loginAuthJWT)
-app.get("/api/products",               jwtGuard, apiProductsController.listProducts);
-app.get("/api/tags",                   jwtGuard, apiProductsController.getTags)
-app.get("/api/products/:productId",    jwtGuard, apiProductsController.getProduct);
-app.post("/api/products",              jwtGuard, uploadFile.single("image"), apiProductsController.newProduct);
-app.put("/api/products/:productId",    jwtGuard, uploadFile.single("image"), apiProductsController.updateProduct);
-app.delete("/api/products/:productId", jwtGuard, apiProductsController.deleteProduct)
+app.post("/api/login", loginAuthJWT);
+app.get("/api/products", jwtGuard, apiProductsController.listProducts);
+app.get("/api/tags", jwtGuard, apiProductsController.getTags);
+app.get("/api/products/:productId", jwtGuard, apiProductsController.getProduct);
+app.post(
+  "/api/products",
+  jwtGuard,
+  uploadFile.single("image"),
+  apiProductsController.newProduct
+);
+app.put(
+  "/api/products/:productId",
+  jwtGuard,
+  uploadFile.single("image"),
+  apiProductsController.updateProduct
+);
+app.delete(
+  "/api/products/:productId",
+  jwtGuard,
+  apiProductsController.deleteProduct
+);
 
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
@@ -83,7 +97,7 @@ app.post(
   sessionManager.guard,
   productController.deleteProduct
 );
-app.use('/api-docs', swaggerMiddleware)
+app.use("/api-docs", swaggerMiddleware);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -92,11 +106,12 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
-
   // Manage validation errors
   if (err.array) {
     err.message =
-      "Invalid request: " + err.array()
+      "Invalid request: " +
+      err
+        .array()
         .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
         .join(", ");
     err.status = 422;
