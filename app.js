@@ -7,6 +7,7 @@ import express from "express";
 import createError from "http-errors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import cors from "cors";
 import connectMongoose from "./lib/connectMongoose.js";
 
 import * as homeController from "./controllers/homeController.js";
@@ -20,6 +21,7 @@ import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
 import changeLang from "./controllers/langLocaleController.js";
 import swaggerMiddleware from "./lib/swaggerMiddleware.js";
+import { corsOptions } from "./lib/corsConfigure.js";
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -35,9 +37,10 @@ app.locals.titleApp = "Nodepop";
 /**
  * Use middlewares
  */
+app.use(cors(corsOptions));
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
