@@ -26,5 +26,12 @@
 	"¿Already have an account? Login": "¿Tiene una cuenta? Entrar",
 	"To view your products, you must": "Para ver sus productos, debe hacer",
 	"¿Are you sure you want to remove?": "¿Estás seguro de que deseas eliminarlo?",
-	"Delete": "Borrar"
+	"Delete": "Borrar",
+	"Hold Ctrl (or Cmd) to select multiple tags": "Mantenga pulsada la tecla Ctrl (o Cmd) para seleccionar varias etiquetas",
+	"Back to home": "Volver a inicio",
+	"error": {
+		"notFound": "No encontrado",
+		"internal": "Error interno del servidor",
+		"validation": "Solicitud no válida"
+	}
 }

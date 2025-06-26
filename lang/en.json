@@ -26,5 +26,12 @@
 	"¿Already have an account? Login": "¿Already have an account? Login",
 	"To view your products, you must": "To view your products, you must",
 	"¿Are you sure you want to remove?": "¿Are you sure you want to remove?",
-	"Delete": "Delete"
+	"Delete": "Delete",
+	"Hold Ctrl (or Cmd) to select multiple tags": "Hold Ctrl (or Cmd) to select multiple tags",
+	"Back to home": "Back to home",
+	"error": {
+		"notFound": "Not found",
+		"internal": "Internal server error",
+		"validation": "Invalid request"
+	}
 }

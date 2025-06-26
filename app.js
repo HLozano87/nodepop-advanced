@@ -104,32 +104,34 @@ app.use("/api-docs", swaggerMiddleware);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  const err = createError(404);
+  err.message = "error.notFound"
+  next(err)
 });
 
 // error handler
 app.use(function (err, req, res, next) {
   // Manage validation errors
   if (err.array) {
-    err.message =
-      "Invalid request: " +
-      err
-        .array()
-        .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
-        .join(", ");
-    err.status = 422;
-  }
+  const validationDetails = err
+    .array()
+    .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
+    .join(", ");
+
+  err.message = res.__('error.validation') + ": " + validationDetails;
+  err.status = 422;
+}
 
   res.status(err.status || 500);
 
   // For API errors response must be JSON
   if (req.url.startsWith("/api/")) {
-    res.json({ error: err.message });
+    res.json({ error: res.__(err.message) });
     return;
   }
 
   // set locals, only providing error in development
-  res.locals.message = err.message;
+  res.locals.message = res.__(err.message);
   res.locals.error = process.env.NODEPOP_ENV === "development" ? err : {};
 
   // render the error page
