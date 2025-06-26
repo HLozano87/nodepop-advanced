@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import { io } from "../webSocketServer.js";
+import { promisify } from "util";
 
 export const index = (req, res, next) => {
   res.locals.error = "";
@@ -51,6 +53,7 @@ export async function loginUser(req, res, next) {
       return res.render("login");
     }
     req.session.userId = user.id;
+    req.session.name = user.name;
 
     res.redirect(redir ? redir : "/");
   } catch (error) {
@@ -59,12 +62,21 @@ export async function loginUser(req, res, next) {
   }
 }
 
-export function logout(req, res, next) {
-  req.session.regenerate((err) => {
-    if (err) {
-      next(err);
-      return;
-    }
-    res.redirect("login");
-  });
+export async function logout(req, res, next) {
+  const oldSessionId = req.session.id;
+  const userId = req.session.userId;
+  try {
+    const user = await User.findById(userId);
+    const regenerate = promisify(req.session.regenerate).bind(req.session);
+    await regenerate();
+
+    io.to(oldSessionId).emit("close-session", `See yo soon ${user.name}!`);
+    io.in(oldSessionId).disconnectSockets(true);
+
+    setTimeout(() => {
+      res.redirect("login");
+    }, 1000);
+  } catch (error) {
+    next(error);
+  }
 }

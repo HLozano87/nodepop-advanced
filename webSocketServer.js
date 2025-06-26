@@ -1,16 +1,23 @@
 import { Server } from "socket.io";
+import * as sessionManager from "./lib/sessionManager.js"
+
+export let io
 
 export function setupWebSocketServer(httpServer) {
-  const io = new Server(httpServer);
+  io = new Server(httpServer);
+
+  io.engine.use(sessionManager.sessionUser)
 
   io.on("connection", (socket) => {
-    console.log("Nueva conexión de un cliente con id", socket.id);
+    const sessionId = socket.request.session.id
+    socket.join(sessionId)
 
-    socket.on("chat-message", (payload) => {
-      console.log(
-        `Mensaje recibido del cliente id: ${socket.id} y texto: "${payload}"`
-      );
-      io.emit("chat-message", payload);
+    socket.on("welcome-user", message => {
+      io.emit("welcome-user", message);
     });
+
+    socket.on("close-session", message => {
+      io.emit("close-session", message)
+    })
   });
 }
