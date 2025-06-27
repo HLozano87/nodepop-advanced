@@ -13,7 +13,7 @@ export async function listProducts(req, res, next) {
 
     // Pagination
     const limit = req.query.limit;
-    const skip = req.query.sort;
+    const skip = req.query.skip;
 
     // Sort
     const sort = req.query.sort;
