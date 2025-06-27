@@ -45,6 +45,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
 /**
+ * Internationalization
+ */
+app.use(i18n.init);
+app.use((req, res, next) => {
+  res.locals.__ = res.__;
+  next();
+});
+app.get("/lang-change/:locale", changeLang);
+
+/**
  * API Routes
  */
 
@@ -73,8 +83,6 @@ app.delete(
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
 app.use(sessionManager.useSessionUsersInViews);
-app.use(i18n.init);
-app.get("/lang-change/:locale", changeLang);
 
 /**
  * Web Routes definitions
