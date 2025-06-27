@@ -1,79 +1,158 @@
 <%- include('header') %>
+
 <main class="flex-grow">
   <div class="max-w-7xl mx-auto px-4 mt-6">
     <% if (!session.userId) { %>
-  
       <div class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded mb-6">
         <%= __("To view your products, you must") %>
         <a href="/login" class="underline font-semibold hover:text-blue-600">login</a>.
       </div>
     <% } else { %>
-  
-      <div class="flex items-center justify-between mb-6">
+
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <h2 class="text-2xl font-bold text-gray-800"><%= __("My Products") %></h2>
-        <a href="/user/new" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-          <%= __("Add new product") %>
-        </a>
+
+        <div class="flex gap-4">
+          <button
+            id="toggleFiltersBtn"
+            type="button"
+            class="bg-blue-600 text-white font-medium py-2 px-4 rounded hover:bg-blue-700 transition"
+          >
+            <%= __("Filters") %> ▼
+          </button>
+
+          <a href="/user/new" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+            <%= __("Add new product") %>
+          </a>
+        </div>
       </div>
-  
+
+      <form
+        id="filtersForm"
+        method="GET"
+        class="bg-gray-50 border border-gray-200 p-4 rounded mb-6 grid grid-cols-1 md:grid-cols-4 gap-4 hidden"
+      >
+        <input
+          type="text"
+          name="name"
+          value="<%= filter && filter.name ? filter.name : '' %>"
+          placeholder="Filter by name"
+          class="border border-gray-300 rounded px-3 py-2 w-full"
+        />
+        <input
+          type="number"
+          name="price"
+          value="<%= filter && filter.price ? filter.price : '' %>"
+          placeholder="Filter by price"
+          class="border border-gray-300 rounded px-3 py-2 w-full"
+        />
+
+        <select name="tags" class="border border-gray-300 rounded px-3 py-2 w-full">
+          <option value=""><%= __("Filter by tags") %></option>
+          <% uniqueTags.forEach(tag => { %>
+            <option value="<%= tag %>" <%= filter && filter.tags === tag ? 'selected' : '' %>>
+              <%= tag %>
+            </option>
+          <% }) %>
+        </select>
+
+        <select
+          name="sort"
+          class="border border-gray-300 rounded px-3 py-2 w-full"
+        >
+          <option value="name" <%= filter && filter.sort === 'name' ? 'selected' : '' %>>Name</option>
+          <option value="price" <%= filter && filter.sort === 'price' ? 'selected' : '' %>>Price</option>
+        </select>
+
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded md:col-span-4 w-full"
+        >
+          <%= __("Apply Filters") %>
+        </button>
+      </form>
+
       <% if (products.length === 0) { %>
-  
         <div class="bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-3 rounded mb-6">
           <%= __("You have no products, add your first product!") %>
         </div>
-  
       <% } else { %>
-  
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <% for (const product of products) { %>
-            <div class="bg-white rounded shadow-md overflow-hidden flex flex-col" id="<%= product._id %>">
-              <img
-                src="<%= product.image ? `/uploads/${product.image}` : 'https://placehold.co/600x400.png' %>"
-                alt="<%= product.name %>"
-                class="w-full h-48 object-cover"
-              />
-              <div class="p-4 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 class="text-lg font-semibold text-gray-900"><%= product.name %></h3>
-  
-                  <% if (product.tags && product.tags.length > 0) { %>
-                    <div class="mt-2">
+
+        <div class="overflow-x-auto">
+          <ul class="w-full border border-gray-200 rounded divide-y divide-gray-200">
+            <li class="grid grid-cols-4 md:grid-cols-5 bg-gray-100 font-semibold text-gray-700 text-sm uppercase px-4 py-2">
+              <span><%= __("Name") %></span>
+              <span><%= __("Image") %></span>
+              <span><%= __("Price") %></span>
+              <span><%= __("Tags") %></span>
+              <span><%= __("Delete") %></span>
+            </li>
+
+            <% for (const product of products) { %>
+              <li class="grid grid-cols-4 md:grid-cols-5 px-4 py-3 items-center">
+                <a href="/products/<%= product._id %>" class="contents">
+                  <span class="text-gray-900 font-medium cursor-pointer hover:underline"><%= product.name %></span>
+
+                  <span>
+                    <img
+                      src="<%= product.image ? `/uploads/${product.image}` : 'https://placehold.co/100x100.png' %>"
+                      alt="<%= product.name %>"
+                      class="w-16 h-16 object-cover rounded cursor-pointer"
+                    />
+                  </span>
+
+                  <span class="text-blue-600 font-semibold cursor-pointer">
+                    <%= product.price.toFixed(2) %>€
+                  </span>
+
+                  <span>
+                    <% if (product.tags && product.tags.length > 0) { %>
                       <% for (const tag of product.tags) { %>
-                        <span class="inline-block bg-gray-200 text-gray-800 text-xs font-medium mr-2 px-2 py-1 rounded">
+                        <span class="inline-block bg-gray-200 text-gray-800 text-xs font-medium mr-1 px-2 py-0.5 rounded cursor-pointer">
                           <%= tag %>
                         </span>
                       <% } %>
-                    </div>
-                  <% } %>
-                </div>
-  
-                <p class="text-blue-600 font-bold text-lg mt-4">
-                  <%= product.price.toFixed(2) %>€
-                </p>
-              </div>
-  
-              <div class="px-4 py-3 bg-gray-50 border-t flex justify-between items-center">
-                <form
-                  action="/user/delete/<%= product._id %>"
-                  method="post"
-                  class="inline"
-                >
-                  <button
-                    type="submit"
-                    class="text-red-600 hover:text-red-800 text-sm font-medium flex items-center gap-1"
-                    onclick="return confirm('<%= __(`¿Are you sure you want to remove?`) %>')"
+                    <% } %>
+                  </span>
+                </a>
+
+                <span>
+                  <form
+                    action="/user/delete/<%= product._id %>"
+                    method="post"
+                    class="inline"
                   >
-                    🗑️ <%= __("Delete") %>
-                  </button>
-                </form>
-              </div>
-            </div>
-          <% } %>
+                    <button
+                      type="submit"
+                      class="text-red-600 hover:text-red-800 text-sm font-medium flex items-center gap-1"
+                      onclick="return confirm('<%= __(`¿Are you sure you want to remove?`) %>')"
+                    >
+                      🗑️ <%= __("Delete") %>
+                    </button>
+                  </form>
+                </span>
+              </li>
+            <% } %>
+          </ul>
         </div>
-  
+
       <% } %>
     <% } %>
   </div>
 </main>
 
 <%- include('footer') %>
+
+<script>
+  const toggleBtn = document.getElementById('toggleFiltersBtn');
+  const filtersForm = document.getElementById('filtersForm');
+
+  toggleBtn.addEventListener('click', () => {
+    filtersForm.classList.toggle('hidden');
+    if (filtersForm.classList.contains('hidden')) {
+      toggleBtn.textContent = '<%= __("Filters") %> ▼';
+    } else {
+      toggleBtn.textContent = '<%= __("Filters") %> ▲';
+    }
+  });
+</script>

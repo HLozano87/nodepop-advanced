@@ -34,5 +34,8 @@
 		"internal": "Internal server error",
 		"validation": "Invalid request"
 	},
-	"All rights reserved.": "All rights reserved."
+	"All rights reserved.": "All rights reserved.",
+	"Filter by tags": "Filter by tags",
+	"Apply Filters": "Apply Filters",
+	"Filters": "Filters"
 }

@@ -19,7 +19,7 @@ export const index = async (req, res, next) => {
     };
 
     if (filterName) {
-      filter.name = filterName;
+      filter.name = filterName.trim().toLowerCase();
     }
     if (filterPrice) {
       filter.price = filterPrice;
@@ -31,6 +31,8 @@ export const index = async (req, res, next) => {
 
     const user = await User.findById(userId);
     const products = await Product.list(filter, limit, skip, sort);
+    const uniqueTags = await Product.distinct("tags")
+
     res.locals.products = products;
 
     setTimeout(() => {
@@ -42,7 +44,11 @@ export const index = async (req, res, next) => {
         return;
       }
     }, 1000);
-    res.render("index");
+    res.render("index", {
+      products,
+      filter: { name: filterName, price: filterPrice, tags: filterTags, sort },
+      uniqueTags
+    });
   } catch (error) {
     next(error);
   }

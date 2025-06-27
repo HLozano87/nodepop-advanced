@@ -34,5 +34,8 @@
 		"internal": "Error interno del servidor",
 		"validation": "Solicitud no válida"
 	},
-	"All rights reserved.": "Todos los derechos reservados."
+	"All rights reserved.": "Todos los derechos reservados.",
+	"Filter by tags": "Filtrar por etiquetas",
+	"Apply Filters": "Aplicar Filtros",
+	"Filters": "Filters"
 }
