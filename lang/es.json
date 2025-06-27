@@ -33,5 +33,6 @@
 		"notFound": "No encontrado",
 		"internal": "Error interno del servidor",
 		"validation": "Solicitud no válida"
-	}
+	},
+	"All rights reserved.": "Todos los derechos reservados."
 }
