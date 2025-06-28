@@ -12,8 +12,8 @@ export async function listProducts(req, res, next) {
     const filterTags = req.query.tags;
 
     // Pagination
-    const limit = req.query.limit;
-    const skip = req.query.skip;
+    const limit = parseInt(req.query.limit || 10);
+    const skip = parseInt(req.query.skip || 0);
 
     // Sort
     const sort = req.query.sort;
@@ -36,7 +36,7 @@ export async function listProducts(req, res, next) {
     }
 
     if (filterTags) {
-      filter.tags = filterTags;
+      filter.tags = { $in: filterTags.split(",") };
     }
 
     const products = await Product.list(filter, limit, skip, sort, fields);
@@ -59,6 +59,10 @@ export async function getProduct(req, res, next) {
     const userId = req.userId;
 
     const product = await Product.findOne({ _id: productId, owner: userId });
+
+    if(!product) {
+      return res.status(404).json({ error: "Not found" })
+    }
 
     res.json({ result: product });
   } catch (error) {
@@ -131,15 +135,16 @@ export async function deleteProduct(req, res, next) {
     }
 
     if (product.image) {
-      await unlink(
-        path.join(process.cwd(), "public", "uploads", product.image)
-      );
-      await unlink(imagePath);
+      try {
+        await unlink(path.join(process.cwd(), "public", "uploads", product.image));
+      } catch (error) {
+        console.warn(`WARNING! Could not delete image file: ${err.message}`);
+      }
     }
 
     await Product.deleteOne({ _id: productId, owner: userId });
 
-    res.json();
+    res.status(201).end();
   } catch (error) {
     next(error);
   }

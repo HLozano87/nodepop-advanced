@@ -1,27 +1,23 @@
 /**
- * Import modules
+ * Imports
  */
 import path from "path";
-
 import express from "express";
 import createError from "http-errors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import cors from "cors";
+
 import connectMongoose from "./lib/connectMongoose.js";
 
-import * as homeController from "./controllers/homeController.js";
-import * as productController from "./controllers/productController.js";
-import * as loginController from "./controllers/loginController.js";
-import * as sessionManager from "./lib/sessionManager.js";
-import * as apiProductsController from "./controllers/api/apiProductsController.js";
-import { loginAuthJWT, signUp } from "./controllers/api/apiLoginController.js";
-import { jwtGuard } from "./lib/jwtAuthMiddleware.js";
-import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
-import changeLang from "./controllers/langLocaleController.js";
-import swaggerMiddleware from "./lib/swaggerMiddleware.js";
+import * as sessionManager from "./lib/sessionManager.js";
 import { corsOptions } from "./lib/corsConfigure.js";
+import swaggerMiddleware from "./lib/swaggerMiddleware.js";
+import changeLang from "./controllers/langLocaleController.js";
+
+import webRoutes from "./routes/webRoutes.js"
+import apiRoutes from "./routes/apiRoutes.js"
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -44,6 +40,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
+// Middlewares to sessionUsers
+app.use(sessionManager.sessionUser);
+app.use(sessionManager.useSessionUsersInViews);
+
 /**
  * Internationalization
  */
@@ -55,41 +55,10 @@ app.use((req, res, next) => {
 app.get("/lang-change/:locale", changeLang);
 
 /**
- * API Routes
+ * Routes
  */
-app.post("/api/signup", signUp);
-app.post("/api/login", loginAuthJWT);
-app.get("/api/products", jwtGuard, apiProductsController.listProducts);
-app.get("/api/tags", jwtGuard, apiProductsController.getTags);
-app.get("/api/products/:productId", jwtGuard, apiProductsController.getProduct);
-app.post("/api/products", jwtGuard, uploadFile.single("image"), apiProductsController.newProduct);
-app.put("/api/products/:productId", jwtGuard, uploadFile.single("image"), apiProductsController.updateProduct);
-app.delete("/api/products/:productId", jwtGuard, apiProductsController.deleteProduct);
-
-// Middlewares to sessionUsers
-app.use(sessionManager.sessionUser);
-app.use(sessionManager.useSessionUsersInViews);
-
-/**
- * Web Routes definitions
- */
-app.get("/", homeController.index);
-
-// Login
-app.get("/login", loginController.index);
-app.post("/login", loginController.loginUser);
-app.get("/logout", loginController.logout);
-
-// Products User Auth
-app.get("/user/new", sessionManager.guard, productController.index);
-app.post("/user/new", sessionManager.guard, uploadFile.single("imagenFile"), productController.validateParams, productController.createProduct);
-
-app.get("/user/detail-product/:productId", sessionManager.guard, productController.validateProductId, productController.getProductDetail);
-app.route("/user/update/:productId")
-  .get(sessionManager.guard, productController.validateProductId, productController.updateProductForm)
-  .post(sessionManager.guard, productController.validateProductId, uploadFile.single("imagenFile"), productController.validateParams, productController.updateProduct);
-
-app.post("/user/delete/:productId", sessionManager.guard, productController.validateProductId, productController.deleteProduct);
+app.use("/api", apiRoutes)
+app.use("/", webRoutes);
 app.use("/api-docs", swaggerMiddleware);
 
 // catch 404 and forward to error handler
