@@ -48,5 +48,8 @@
 	"Passwords not match.": "Passwords not match.",
 	"Credentials not valid.": "Credentials not valid.",
 	"Email and password required.": "Email and password required.",
-	"See you soon, %s!": "See you soon, %s!"
+	"See you soon, %s!": "See you soon, %s!",
+	"%s was create successfully": "%s created successfully",
+	"%s was update successfully": "%s updated successfully",
+	"%s was delete successfully": "%s was delete successfully"
 }

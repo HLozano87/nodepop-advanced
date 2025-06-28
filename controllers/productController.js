@@ -3,6 +3,7 @@ import Product from "../models/Product.js";
 import User from "../models/User.js";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
+import { io } from "../webSocketServer.js";
 
 export const validateParams = [
   body("name")
@@ -17,14 +18,14 @@ export const validateParams = [
     .withMessage("El precio debe ser un número mayor a 0"),
   body("image").optional().isString(),
   body("tags")
-    .customSanitizer(value => {
+    .customSanitizer((value) => {
       if (Array.isArray(value)) return value;
       if (typeof value === "string") return [value];
       return [];
     })
-    .isArray({min: 1}).withMessage("Las etiquetas deben ser un arreglo"),
-  body("tags.*")
-    .isString().withMessage("Cada etiqueta debe ser un string"),
+    .isArray({ min: 1 })
+    .withMessage("Las etiquetas deben ser un arreglo"),
+  body("tags.*").isString().withMessage("Cada etiqueta debe ser un string"),
   body("tags.*").isString().withMessage("Cada etiqueta debe ser un string"),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -48,7 +49,6 @@ export const index = (req, res, next) => {
   res.render("new-product");
 };
 
-// Controlador nuevo para mostrar el formulario
 export const updateProductForm = async (req, res, next) => {
   try {
     const productId = req.params.productId;
@@ -71,6 +71,7 @@ export const createProduct = async (req, res, next) => {
     const { name, price, tags } = req.body;
     const image = req.file?.filename;
     const userId = req.session.userId;
+    const __ = res.__;
 
     const product = new Product({
       name,
@@ -81,7 +82,12 @@ export const createProduct = async (req, res, next) => {
     });
     await product.save();
 
-    //TODO TOAST
+    setTimeout(() => {
+      io.to(req.session.id).emit(
+        "create-product",
+        __("%s was create successfully", product.name)
+      );
+    }, 1500);
 
     res.redirect("/");
   } catch (error) {
@@ -93,6 +99,7 @@ export const updateProduct = async (req, res, next) => {
   try {
     const productId = req.params.productId;
     const userId = req.session.userId;
+    const __ = req.__;
 
     const productData = {
       name: req.body.name,
@@ -108,6 +115,13 @@ export const updateProduct = async (req, res, next) => {
       productData,
       { new: true }
     );
+
+    setTimeout(() => {
+      io.to(req.session.id).emit(
+        "create-product",
+        __("%s was update successfully", updatedProduct.name)
+      );
+    }, 1000);
     res.redirect("/");
   } catch (error) {
     next(error);
@@ -119,7 +133,7 @@ export const deleteProduct = async (req, res, next) => {
     const userId = req.session.userId;
     const productId = req.params.productId;
     const product = await Product.findById(productId);
-    const user = await User.findById(userId);
+    const __ = req.__;
 
     if (product.image) {
       const imagePath = path.join(
@@ -133,7 +147,12 @@ export const deleteProduct = async (req, res, next) => {
 
     await Product.deleteOne({ _id: productId, owner: userId });
 
-    // TODO TOAST
+    setTimeout(() => {
+      io.to(req.session.id).emit(
+        "delete-product",
+        __("%s was delete successfully", product.name)
+      );
+    }, 1000);
 
     res.redirect("/");
   } catch (error) {

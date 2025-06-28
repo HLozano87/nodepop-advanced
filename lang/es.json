@@ -48,5 +48,8 @@
 	"Passwords not match.": "Las contraseñas no coinciden.",
 	"Credentials not valid.": "Credenciales no válidas.",
 	"Email and password required.": "Correo y contraseña requeridos.",
-	"See you soon, %s!": "Hasta pronto, %s!"
+	"See you soon, %s!": "Hasta pronto, %s!",
+	"%s was create successfully": "%s se ha creado correctamente",
+	"%s was update successfully": "%s se ha actualizado correctamente",
+	"%s was delete successfully": "%s se ha eliminado correctamente"
 }
