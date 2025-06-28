@@ -35,7 +35,7 @@ async function initDBNodepop(users) {
   const availableTags = Product.getTags();
   const newProduct = Array.from({ length: 10 }, () => ({
     name: chance.word(),
-    price: chance.floating({ min: 1, max: 3000 }),
+    price: chance.floating({ min: 1, max: 3000 }).toFixed(2),
     tags: chance.pickset(
       availableTags,
       chance.integer({ min: 1, max: availableTags.length })
