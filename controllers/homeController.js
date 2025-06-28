@@ -1,6 +1,4 @@
 import Product from "../models/Product.js";
-import User from "../models/User.js";
-import { io } from "../webSocketServer.js";
 
 /* GET home page. */
 export const index = async (req, res, next) => {
@@ -29,16 +27,15 @@ export const index = async (req, res, next) => {
       filter.tags = filterTags;
     }
 
-    const user = await User.findById(userId);
     const products = await Product.list(filter, limit, skip, sort);
-    const uniqueTags = await Product.distinct("tags")
+    const uniqueTags = await Product.distinct("tags");
 
     res.locals.products = products;
-    
+
     res.render("index", {
       products,
       filter: { name: filterName, price: filterPrice, tags: filterTags, sort },
-      uniqueTags
+      uniqueTags,
     });
   } catch (error) {
     next(error);

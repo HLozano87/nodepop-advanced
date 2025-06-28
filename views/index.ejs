@@ -36,22 +36,22 @@
           type="text"
           name="name"
           value="<%= filter && filter.name ? filter.name : '' %>"
-          placeholder="Filter by name"
+          placeholder="<%= __("Filter by name") %>"
           class="border border-gray-300 rounded px-3 py-2 w-full"
         />
         <input
           type="number"
           name="price"
           value="<%= filter && filter.price ? filter.price : '' %>"
-          placeholder="Filter by price"
+          placeholder="<%= __("Filter by price") %>"
           class="border border-gray-300 rounded px-3 py-2 w-full"
         />
 
         <select name="tags" class="border border-gray-300 rounded px-3 py-2 w-full">
           <option value=""><%= __("Filter by tags") %></option>
           <% uniqueTags.forEach(tag => { %>
-            <option value="<%= tag %>" <%= filter && filter.tags === tag ? 'selected' : '' %>>
-              <%= tag %>
+            <option value="<%= __(tag) %>" <%= filter && filter.tags === tag ? 'selected' : '' %>>
+              <%= __(tag) %>
             </option>
           <% }) %>
         </select>
@@ -60,8 +60,8 @@
           name="sort"
           class="border border-gray-300 rounded px-3 py-2 w-full"
         >
-          <option value="name" <%= filter && filter.sort === 'name' ? 'selected' : '' %>>Name</option>
-          <option value="price" <%= filter && filter.sort === 'price' ? 'selected' : '' %>>Price</option>
+          <option value="name" <%= filter && filter.sort === 'name' ? 'selected' : '' %>><%= __("Name") %></option>
+          <option value="price" <%= filter && filter.sort === 'price' ? 'selected' : '' %>><%= __("Price") %></option>
         </select>
 
         <button

@@ -1,6 +1,5 @@
 import { body, validationResult } from "express-validator";
 import Product from "../models/Product.js";
-import User from "../models/User.js";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
 import { io } from "../webSocketServer.js";
@@ -87,7 +86,7 @@ export const createProduct = async (req, res, next) => {
         "create-product",
         __("%s was create successfully", product.name)
       );
-    }, 1500);
+    }, 1000);
 
     res.redirect("/");
   } catch (error) {

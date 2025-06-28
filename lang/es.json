@@ -7,10 +7,10 @@
 	"Name product": "Nombre de producto",
 	"Price": "Precio",
 	"Tags": "Etiquetas",
-	"Work": "Trabajo",
-	"Lifestyle": "Estilo de vida",
-	"Motor": "Motor",
-	"Mobile": "Movil",
+	"motor": "motor",
+	"mobile": "movil",
+	"work": "trabajo",
+	"lifestyle": "estilo de vida",
 	"Image": "Imagen",
 	"Upload": "Cargar",
 	"Cancel": "Cancelar",
@@ -37,7 +37,7 @@
 	"All rights reserved.": "Todos los derechos reservados.",
 	"Filter by tags": "Filtrar por etiquetas",
 	"Apply Filters": "Aplicar Filtros",
-	"Filters": "Filters",
+	"Filters": "Filtros",
 	"Change Image": "Cambiar Imagen",
 	"Tags (select at least one)": "Etiquetas (seleccione al menos una)",
 	"Save Changes": "Guardar Cambios",
@@ -51,5 +51,7 @@
 	"See you soon, %s!": "Hasta pronto, %s!",
 	"%s was create successfully": "%s se ha creado correctamente",
 	"%s was update successfully": "%s se ha actualizado correctamente",
-	"%s was delete successfully": "%s se ha eliminado correctamente"
+	"%s was delete successfully": "%s se ha eliminado correctamente",
+	"Filter by name": "Filtrar por nombre",
+	"Filter by price": "Filtrar por precio"
 }

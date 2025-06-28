@@ -7,10 +7,10 @@
 	"Name product": "Name product",
 	"Price": "Price",
 	"Tags": "Tags",
-	"Work": "Work",
-	"Lifestyle": "Lifestyle",
-	"Motor": "Motor",
-	"Mobile": "Mobile",
+	"motor": "motor",
+	"mobile": "mobile",
+	"work": "work",
+	"lifestyle": "lifestyle",
 	"Image": "Image",
 	"Upload": "Upload",
 	"Cancel": "Cancel",
@@ -51,5 +51,7 @@
 	"See you soon, %s!": "See you soon, %s!",
 	"%s was create successfully": "%s created successfully",
 	"%s was update successfully": "%s updated successfully",
-	"%s was delete successfully": "%s was delete successfully"
+	"%s was delete successfully": "%s was delete successfully",
+	"Filter by name": "Filter by name",
+	"Filter by price": "Filter by price"
 }
