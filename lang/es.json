@@ -37,5 +37,11 @@
 	"All rights reserved.": "Todos los derechos reservados.",
 	"Filter by tags": "Filtrar por etiquetas",
 	"Apply Filters": "Aplicar Filtros",
-	"Filters": "Filters"
+	"Filters": "Filters",
+	"Change Image": "Cambiar Imagen",
+	"Tags (select at least one)": "Etiquetas (seleccione al menos una)",
+	"Save Changes": "Guardar Cambios",
+	"Current Image": "Imagen Actual",
+	"Edit": "Editar",
+	"Edit Product": "Editar Producto"
 }

@@ -116,16 +116,21 @@
                   </span>
                 </a>
 
-                <span>
+                <span class="flex items-center gap-3">
+                  <a 
+                    href="/user/update/<%= product._id %>"
+                    class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1"
+                  >
+                    ✏️ <%= __("Edit") %>
+                  </a>
                   <form
                     action="/user/delete/<%= product._id %>"
                     method="post"
-                    class="inline"
+                    onsubmit="return confirm('<%= __(`¿Are you sure you want to remove?`) %>')"
                   >
                     <button
                       type="submit"
                       class="text-red-600 hover:text-red-800 text-sm font-medium flex items-center gap-1"
-                      onclick="return confirm('<%= __(`¿Are you sure you want to remove?`) %>')"
                     >
                       🗑️ <%= __("Delete") %>
                     </button>

@@ -103,6 +103,14 @@ app.post(
   productController.validateParams,
   productController.createProduct
 );
+app.get("/user/update/:productId", sessionManager.guard, productController.updateProductForm)
+app.post(
+  "/user/update/:productId",
+  sessionManager.guard,
+  uploadFile.single('imagenFile'),
+  productController.validateParams,
+  productController.updateProduct
+);
 app.post(
   "/user/delete/:productId",
   sessionManager.guard,
@@ -113,22 +121,22 @@ app.use("/api-docs", swaggerMiddleware);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = createError(404);
-  err.message = "error.notFound"
-  next(err)
+  err.message = "error.notFound";
+  next(err);
 });
 
 // error handler
 app.use(function (err, req, res, next) {
   // Manage validation errors
   if (err.array) {
-  const validationDetails = err
-    .array()
-    .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
-    .join(", ");
+    const validationDetails = err
+      .array()
+      .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
+      .join(", ");
 
-  err.message = res.__('error.validation') + ": " + validationDetails;
-  err.status = 422;
-}
+    err.message = res.__("error.validation") + ": " + validationDetails;
+    err.status = 422;
+  }
 
   res.status(err.status || 500);
 

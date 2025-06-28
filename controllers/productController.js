@@ -16,7 +16,15 @@ export const validateParams = [
     .custom((value) => value > 0)
     .withMessage("El precio debe ser un número mayor a 0"),
   body("image").optional().isString(),
-  body("tags").isArray().withMessage("Las etiquetas deben ser un arreglo"),
+  body("tags")
+    .customSanitizer(value => {
+      if (Array.isArray(value)) return value;
+      if (typeof value === "string") return [value];
+      return [];
+    })
+    .isArray({min: 1}).withMessage("Las etiquetas deben ser un arreglo"),
+  body("tags.*")
+    .isString().withMessage("Cada etiqueta debe ser un string"),
   body("tags.*").isString().withMessage("Cada etiqueta debe ser un string"),
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -40,6 +48,24 @@ export const index = (req, res, next) => {
   res.render("new-product");
 };
 
+// Controlador nuevo para mostrar el formulario
+export const updateProductForm = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const userId = req.session.userId;
+    const uniqueTags = await Product.distinct("tags");
+
+    const product = await Product.findOne({ _id: productId, owner: userId });
+    if (!product) {
+      return res.status(404).send("Producto no encontrado");
+    }
+
+    res.render("update-product", { product, uniqueTags });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const createProduct = async (req, res, next) => {
   try {
     const { name, price, tags } = req.body;
@@ -57,6 +83,31 @@ export const createProduct = async (req, res, next) => {
 
     //TODO TOAST
 
+    res.redirect("/");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProduct = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const userId = req.session.userId;
+
+    const productData = {
+      name: req.body.name,
+      price: req.body.price,
+      tags: req.body.tags,
+    };
+    if (req.file) {
+      productData.image = req.file?.filename;
+    }
+
+    const updatedProduct = await Product.findOneAndUpdate(
+      { _id: productId, owner: userId },
+      productData,
+      { new: true }
+    );
     res.redirect("/");
   } catch (error) {
     next(error);
