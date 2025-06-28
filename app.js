@@ -62,23 +62,9 @@ app.post("/api/login", loginAuthJWT);
 app.get("/api/products", jwtGuard, apiProductsController.listProducts);
 app.get("/api/tags", jwtGuard, apiProductsController.getTags);
 app.get("/api/products/:productId", jwtGuard, apiProductsController.getProduct);
-app.post(
-  "/api/products",
-  jwtGuard,
-  uploadFile.single("image"),
-  apiProductsController.newProduct
-);
-app.put(
-  "/api/products/:productId",
-  jwtGuard,
-  uploadFile.single("image"),
-  apiProductsController.updateProduct
-);
-app.delete(
-  "/api/products/:productId",
-  jwtGuard,
-  apiProductsController.deleteProduct
-);
+app.post("/api/products", jwtGuard, uploadFile.single("image"), apiProductsController.newProduct);
+app.put("/api/products/:productId", jwtGuard, uploadFile.single("image"), apiProductsController.updateProduct);
+app.delete("/api/products/:productId", jwtGuard, apiProductsController.deleteProduct);
 
 // Middlewares to sessionUsers
 app.use(sessionManager.sessionUser);
@@ -98,12 +84,12 @@ app.get("/logout", loginController.logout);
 app.get("/user/new", sessionManager.guard, productController.index);
 app.post("/user/new", sessionManager.guard, uploadFile.single("imagenFile"), productController.validateParams, productController.createProduct);
 
-app.get("/user/detail-product/:productId", sessionManager.guard, productController.getProductDetail);
+app.get("/user/detail-product/:productId", sessionManager.guard, productController.validateProductId, productController.getProductDetail);
 app.route("/user/update/:productId")
-  .get(sessionManager.guard, productController.updateProductForm)
-  .post(sessionManager.guard, uploadFile.single("imagenFile"), productController.validateParams, productController.updateProduct);
+  .get(sessionManager.guard, productController.validateProductId, productController.updateProductForm)
+  .post(sessionManager.guard, productController.validateProductId, uploadFile.single("imagenFile"), productController.validateParams, productController.updateProduct);
 
-app.post("/user/delete/:productId", sessionManager.guard, productController.deleteProduct);
+app.post("/user/delete/:productId", sessionManager.guard, productController.validateProductId, productController.deleteProduct);
 app.use("/api-docs", swaggerMiddleware);
 
 // catch 404 and forward to error handler

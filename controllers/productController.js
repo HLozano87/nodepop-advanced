@@ -1,9 +1,10 @@
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import Product from "../models/Product.js";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
 import { io } from "../webSocketServer.js";
 import mongoose from "mongoose";
+import createHttpError from "http-errors";
 
 export const validateParams = [
   body("name")
@@ -45,23 +46,39 @@ export const validateParams = [
   },
 ];
 
+export const validateProductId = [
+  param("productId")
+    .custom((value) => mongoose.Types.ObjectId.isValid(value))
+    .withMessage("El ID de producto no tiene un formato válido"),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+    const __ = res.__
+    if (!errors.isEmpty()) {
+      return next(createHttpError(404, "error.notFound"));
+    }
+    next();
+  },
+];
+
 export const index = (req, res, next) => {
   res.render("new-product");
 };
 
 export const getProductDetail = async (req, res, next) => {
   try {
-    const productId = req.params.productId;
+    const { productId } = req.params;
     const userId = req.session.userId;
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
+    if (!productId) {
       return next();
     }
 
-    const product = await Product.findOne({
-      _id: productId,
-      owner: userId,
-    });
+    const product = await Product.findOne({ _id: productId, owner: userId });
+    
+    if (!product) {
+      return next();
+    }
 
     product.imageUrl = product.image ? `/uploads/${product.image}` : null;
 
@@ -77,10 +94,12 @@ export const updateProductForm = async (req, res, next) => {
     const userId = req.session.userId;
     const uniqueTags = await Product.distinct("tags");
 
+    if (!productId) return next()
+
     const product = await Product.findOne({ _id: productId, owner: userId });
-    if (!product) {
-      return res.status(404).send("Producto no encontrado");
-    }
+    
+    if (!product) return next()
+
 
     res.render("update-product", { product, uniqueTags });
   } catch (error) {
