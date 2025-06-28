@@ -5,6 +5,25 @@ info:
   description: API RESTful para la gestión de productos, incluyendo relación con usuarios.
 
 paths:
+  /api/signup:
+    post:
+      summary: Registro de un nuevo usuario
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignUp'
+      responses:
+        "201":
+          description: ""
+        "400":
+          description: ""
+        "409":
+          description: ""
+
   /api/login:
     post:
       summary: Iniciar sesión y obtener para token
@@ -222,6 +241,20 @@ components:
           type: string
           format: date-time
           example: "2025-06-23T15:45:00.000Z"
+
+    SignUp:
+      type: object
+      required:
+        - name
+        - email
+        - password
+      properties:
+        name:
+          type: "string"
+        email:
+          type: "string"
+        password:
+          type: "string"
 
     Login:
       type: object

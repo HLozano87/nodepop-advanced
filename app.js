@@ -15,7 +15,7 @@ import * as productController from "./controllers/productController.js";
 import * as loginController from "./controllers/loginController.js";
 import * as sessionManager from "./lib/sessionManager.js";
 import * as apiProductsController from "./controllers/api/apiProductsController.js";
-import { loginAuthJWT } from "./controllers/api/apiLoginController.js";
+import { loginAuthJWT, signUp } from "./controllers/api/apiLoginController.js";
 import { jwtGuard } from "./lib/jwtAuthMiddleware.js";
 import uploadFile from "./lib/uploadConfigure.js";
 import i18n from "./lib/i18nConfigure.js";
@@ -57,7 +57,7 @@ app.get("/lang-change/:locale", changeLang);
 /**
  * API Routes
  */
-
+app.post("/api/signup", signUp);
 app.post("/api/login", loginAuthJWT);
 app.get("/api/products", jwtGuard, apiProductsController.listProducts);
 app.get("/api/tags", jwtGuard, apiProductsController.getTags);
@@ -103,11 +103,15 @@ app.post(
   productController.validateParams,
   productController.createProduct
 );
-app.get("/user/update/:productId", sessionManager.guard, productController.updateProductForm)
+app.get(
+  "/user/update/:productId",
+  sessionManager.guard,
+  productController.updateProductForm
+);
 app.post(
   "/user/update/:productId",
   sessionManager.guard,
-  uploadFile.single('imagenFile'),
+  uploadFile.single("imagenFile"),
   productController.validateParams,
   productController.updateProduct
 );
@@ -128,13 +132,14 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   // Manage validation errors
+  const __ = res.__
   if (err.array) {
     const validationDetails = err
       .array()
       .map((e) => `${e.location} ${e.type} "${e.path}" ${e.msg}`)
       .join(", ");
 
-    err.message = res.__("error.validation") + ": " + validationDetails;
+    err.message = __(err.validation) + ": " + validationDetails;
     err.status = 422;
   }
 
@@ -142,12 +147,12 @@ app.use(function (err, req, res, next) {
 
   // For API errors response must be JSON
   if (req.url.startsWith("/api/")) {
-    res.json({ error: res.__(err.message) });
+    res.json({ error: __(err.message) });
     return;
   }
 
   // set locals, only providing error in development
-  res.locals.message = res.__(err.message);
+  res.locals.message = __(err.message);
   res.locals.error = process.env.NODEPOP_ENV === "development" ? err : {};
 
   // render the error page
