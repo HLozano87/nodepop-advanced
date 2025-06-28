@@ -96,30 +96,14 @@ app.get("/logout", loginController.logout);
 
 // Products User Auth
 app.get("/user/new", sessionManager.guard, productController.index);
-app.post(
-  "/user/new",
-  sessionManager.guard,
-  uploadFile.single("imagenFile"),
-  productController.validateParams,
-  productController.createProduct
-);
-app.get(
-  "/user/update/:productId",
-  sessionManager.guard,
-  productController.updateProductForm
-);
-app.post(
-  "/user/update/:productId",
-  sessionManager.guard,
-  uploadFile.single("imagenFile"),
-  productController.validateParams,
-  productController.updateProduct
-);
-app.post(
-  "/user/delete/:productId",
-  sessionManager.guard,
-  productController.deleteProduct
-);
+app.post("/user/new", sessionManager.guard, uploadFile.single("imagenFile"), productController.validateParams, productController.createProduct);
+
+app.get("/user/detail-product/:productId", sessionManager.guard, productController.getProductDetail);
+app.route("/user/update/:productId")
+  .get(sessionManager.guard, productController.updateProductForm)
+  .post(sessionManager.guard, uploadFile.single("imagenFile"), productController.validateParams, productController.updateProduct);
+
+app.post("/user/delete/:productId", sessionManager.guard, productController.deleteProduct);
 app.use("/api-docs", swaggerMiddleware);
 
 // catch 404 and forward to error handler
@@ -132,7 +116,7 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   // Manage validation errors
-  const __ = res.__
+  const __ = res.__;
   if (err.array) {
     const validationDetails = err
       .array()

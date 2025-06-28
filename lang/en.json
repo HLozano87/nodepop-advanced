@@ -53,5 +53,6 @@
 	"%s was update successfully": "%s updated successfully",
 	"%s was delete successfully": "%s was delete successfully",
 	"Filter by name": "Filter by name",
-	"Filter by price": "Filter by price"
+	"Filter by price": "Filter by price",
+	"No Image Available": "No Image Available"
 }

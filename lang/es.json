@@ -53,5 +53,6 @@
 	"%s was update successfully": "%s se ha actualizado correctamente",
 	"%s was delete successfully": "%s se ha eliminado correctamente",
 	"Filter by name": "Filtrar por nombre",
-	"Filter by price": "Filtrar por precio"
+	"Filter by price": "Filtrar por precio",
+	"No Image Available": "No hay imagen disponible"
 }

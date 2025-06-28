@@ -3,6 +3,7 @@ import Product from "../models/Product.js";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
 import { io } from "../webSocketServer.js";
+import mongoose from "mongoose";
 
 export const validateParams = [
   body("name")
@@ -46,6 +47,28 @@ export const validateParams = [
 
 export const index = (req, res, next) => {
   res.render("new-product");
+};
+
+export const getProductDetail = async (req, res, next) => {
+  try {
+    const productId = req.params.productId;
+    const userId = req.session.userId;
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return next();
+    }
+
+    const product = await Product.findOne({
+      _id: productId,
+      owner: userId,
+    });
+
+    product.imageUrl = product.image ? `/uploads/${product.image}` : null;
+
+    res.render("detail-product", { product });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const updateProductForm = async (req, res, next) => {
