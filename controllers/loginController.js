@@ -15,9 +15,10 @@ export async function loginUser(req, res, next) {
     const { name, email, password, confirmPassword } = req.body;
     const redir = req.query.redir;
     const newAccount = req.query.newAccount === "true";
+    const __ = res.__
 
     if (!email || !password) {
-      res.locals.error = "Email and password required.";
+      res.locals.error = __("Email and password required.");
       res.locals.email = "";
       res.locals.newAccount = newAccount;
       return res.render("login");
@@ -26,7 +27,7 @@ export async function loginUser(req, res, next) {
     if (newAccount) {
       const userId = req.session.userId;
       if (!confirmPassword || password !== confirmPassword) {
-        res.locals.error = "Passwords not match.";
+        res.locals.error = __("Passwords not match.");
         res.locals.name = name;
         res.locals.email = email;
         res.locals.newAccount = true;
@@ -47,13 +48,20 @@ export async function loginUser(req, res, next) {
     const user = await User.findOne({ email: email });
 
     if (!user || !(await user.comparePassword(password))) {
-      res.locals.error = "Credentials not valid.";
+      res.locals.error = __("Credentials not valid.");
       res.locals.email = email;
       res.locals.newAccount = false;
       return res.render("login");
     }
     req.session.userId = user.id;
     req.session.name = user.name;
+
+    setTimeout(() => {
+      io.to(req.session.id).emit(
+        "login",
+        __('Welcome back to Nodepop, %s!', user.name)
+      );
+    }, 500);
 
     res.redirect(redir ? redir : "/");
   } catch (error) {
@@ -64,18 +72,19 @@ export async function loginUser(req, res, next) {
 
 export async function logout(req, res, next) {
   const oldSessionId = req.session.id;
-  const userId = req.session.userId;
   try {
+    const userId = req.session.userId;
+    const __ = res.__
     const user = await User.findById(userId);
     const regenerate = promisify(req.session.regenerate).bind(req.session);
     await regenerate();
 
-    io.to(oldSessionId).emit("close-session", `See yo soon ${user.name}!`);
+    io.to(oldSessionId).emit("logout", __('See you soon, %s!', user.name));
     io.in(oldSessionId).disconnectSockets(true);
 
     setTimeout(() => {
       res.redirect("login");
-    }, 1000);
+    }, 800);
   } catch (error) {
     next(error);
   }

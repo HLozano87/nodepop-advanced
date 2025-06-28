@@ -34,16 +34,7 @@ export const index = async (req, res, next) => {
     const uniqueTags = await Product.distinct("tags")
 
     res.locals.products = products;
-
-    setTimeout(() => {
-      if (userId) {
-        io.to(req.session.id).emit(
-          "welcome-user",
-          `Welcome back ${user.name}!`
-        );
-        return;
-      }
-    }, 1000);
+    
     res.render("index", {
       products,
       filter: { name: filterName, price: filterPrice, tags: filterTags, sort },

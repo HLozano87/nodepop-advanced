@@ -4,18 +4,18 @@ const socket = io();
 function showToast(msg) {
   Toastify({
     text: msg,
-    duration: 2000,
+    duration: 1000,
     close: true,
     stopOnFocus: true,
     position: "center",
   }).showToast();
 }
 
-socket.on("welcome-user", message => {
+socket.on("login", message => {
   showToast(message);
 });
 
-socket.on("close-session", message => {
+socket.on("logout", message => {
   showToast(message);
 });
 

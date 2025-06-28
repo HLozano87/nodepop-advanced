@@ -43,5 +43,10 @@
 	"Save Changes": "Save Changes",
 	"Current Image": "Current Image",
 	"Edit": "Edit",
-	"Edit Product": "Edit Product"
+	"Edit Product": "Edit Product",
+	"Welcome back to Nodepop, %s!": "Welcome back to Nodepop, %s!",
+	"Passwords not match.": "Passwords not match.",
+	"Credentials not valid.": "Credentials not valid.",
+	"Email and password required.": "Email and password required.",
+	"See you soon, %s!": "See you soon, %s!"
 }
