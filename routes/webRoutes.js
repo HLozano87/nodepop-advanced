@@ -20,7 +20,7 @@ router.get("/user/new", sessionManager.guard, productController.index);
 router.post(
   "/user/new",
   sessionManager.guard,
-  uploadFile.single("imagenFile"),
+  uploadFile.single("imageFile"),
   validator.validateParams,
   productController.createProduct
 );
@@ -42,7 +42,7 @@ router
   .post(
     sessionManager.guard,
     validator.validateProductId,
-    uploadFile.single("imagenFile"),
+    uploadFile.single("imageFile"),
     validator.validateParams,
     productController.updateProduct
   );
