@@ -1,5 +1,7 @@
 # Nodepop
 
+Nodepop es una aplicación web construida con Node.js, Express y MongoDB, diseñada como un servidor de anuncios clasificados.
+
 ### After cloning the repository:
 
 Access the project in windows with:
@@ -60,20 +62,56 @@ First rename file env_tmp to .env and follow instructions this file.
 
 On first deploy you can use the next command to initialize the database:
 
-```sh
-node initDB.js
-```
-
-### Run Nodepop
-
-Development:
+### ⚙️ Scripts disponibles
 
 ```sh
-npm run dev
+npm run initDB → Inicializa la base de datos con datos de ejemplo.
 ```
-
-Start:
 
 ```sh
-npm run start
+npm run dev → Inicia el servidor en modo desarrollo con nodemon.
 ```
+
+```sh
+npm run start → Inicia el servidor en modo producción.
+```
+
+
+
+### 🚀 Tecnologías y dependencias principales
+
+- express, mongoose, ejs, express-session, connect-mongo, bcrypt, jsonwebtoken, express-validator, multer, nodemailer, socket.io, i18n, cors, dotenv, swagger-jsdoc, swagger-ui-express, chance, morgan, debug, http-errors, cookie-parser, nodemon.
+
+
+# 📄 Environment configuration
+
+> Rename the .env.example to .env and fill in the configuration fields with your configuration data:
+
+- PORT=PORT example -> 3000
+- NODEPOP_ENV=development
+- SECRET_SESSION=Here secret string
+- TIME_LIFE_SESSION=Here time in ms
+- MONGO_URI=Here path to mongodb
+- JWT_SECRET=Here Secret string
+
+## Etherial configuration email development
+- EMAIL_SERVICE_HOST=smtp.ethereal.email
+- EMAIL_SERVICE_PORT=587
+- EMAIL_SERVICE_SECURE=false
+- EMAIL_SERVICE_USER=create one from https://ethereal.email/create
+- EMAIL_SERVICE_PASSWORD=create one from https://ethereal.email/create
+- EMAIL_SERVICE_FROM=user@nodepop.com
+
+
+
+
+### 📖 Documentation
+
+Available in http://localhost:3000/api-docs
+
+### 📝 License
+
+> This project is private and for educational or personal use.
+
+> Enjoy programming with Nodepop! 🚀
+
