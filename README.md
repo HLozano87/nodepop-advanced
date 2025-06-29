@@ -1,117 +1,121 @@
-# Nodepop
+# 📦 Nodepop
 
-Nodepop es una aplicación web construida con Node.js, Express y MongoDB, diseñada como un servidor de anuncios clasificados.
+**Nodepop** es una aplicación web construida con **Node.js**, **Express** y **MongoDB**, diseñada como un servidor de anuncios clasificados.
 
-### After cloning the repository:
+---
 
-Access the project in windows with:
+## 🗂️ Clonar y preparar el proyecto
 
-```sh
-cd /project_path/nodepop
-```
-
-Once inside the path run the command ```code .``` this will open the vscode to the **"nodepop ”** folder and from the windows console run the following command for install dependencies with:
-
-```sh
+```bash
+git clone <url_del_repositorio>
+cd nodepop
+code .
 npm install
-
-or
-
-npm i
 ```
 
-This will install all the dependencies needed to start the project.
+---
 
-#### Install [MongoDB](!https://www.mongodb.com) from official page.
+## 🗄️ Instalar y ejecutar MongoDB
 
-### Install MongoDB with Homebrew
+### 🔗 Instalar MongoDB
 
-```zsh
+- Descarga MongoDB desde la [página oficial](https://www.mongodb.com/try/download/community).
+
+### 🍏 Instalar con Homebrew (macOS)
+
+```bash
 brew tap mongodb/brew
 brew update
 brew install mongodb-community@8.0
 ```
 
-### Run MongoDB on MacOS or Linux:
+### ▶️ Ejecutar MongoDB
 
-Start Services mongodb
+**macOS o Linux:**
 
-```sh
+```bash
 brew services start mongodb-community@8.0
-```
+# o manual
+./bin/mongod --dbpath ./data
 
-Stop Services mongodb
-
-```sh
+# Detener servicio
 brew services stop mongodb-community@8.0
 ```
 
-```sh
-./bin/mongod --dbpath ./data
-```
+**Con Docker:**
 
-### Run services using Docker
-
-```sh
+```bash
 docker run --name mongodb -d -p 27017:27017 -v ~/data/db:/data/db mongo:8.0
 ```
 
-## First deployment app Nodepop
+---
 
-First rename file env_tmp to .env and follow instructions this file.
+## 🚀 Primer despliegue de Nodepop
 
-On first deploy you can use the next command to initialize the database:
+1. Renombra `env_tmp` a `.env` y configura tus variables de entorno.
 
-### ⚙️ Scripts disponibles
+2. Inicializa la base de datos:
 
-```sh
-npm run initDB → Inicializa la base de datos con datos de ejemplo.
+   ```bash
+   npm run initDB
+   ```
+
+3. Ejecuta el servidor:
+
+   ```bash
+   npm run dev # desarrollo
+   npm start   # producción
+   ```
+
+---
+
+## ⚙️ Scripts disponibles
+
+- `npm run initDB` → Inicializa la base de datos.
+- `npm run dev` → Modo desarrollo con nodemon.
+- `npm start` → Modo producción.
+
+---
+
+## 💡 Dependencias principales
+
+express, mongoose, ejs, express-session, connect-mongo, bcrypt, jsonwebtoken, express-validator, multer, nodemailer, socket.io, i18n, cors, dotenv, swagger-jsdoc, swagger-ui-express, chance, morgan, debug, http-errors, cookie-parser, nodemon.
+
+---
+
+## 📄 Configuración del entorno
+
+Renombra `.env.example` a `.env`:
+
+```env
+PORT=3000
+NODEPOP_ENV=development
+SECRET_SESSION=tu_cadena_secreta
+TIME_LIFE_SESSION=duracion_en_ms
+MONGO_URI=mongodb://localhost:27017/nodepop
+JWT_SECRET=tu_jwt_secreto
+
+# Email con Ethereal
+EMAIL_SERVICE_HOST=smtp.ethereal.email
+EMAIL_SERVICE_PORT=587
+EMAIL_SERVICE_SECURE=false
+EMAIL_SERVICE_USER=<usuario_ethereal>
+EMAIL_SERVICE_PASSWORD=<contraseña_ethereal>
+EMAIL_SERVICE_FROM=user@nodepop.com
 ```
 
-```sh
-npm run dev → Inicia el servidor en modo desarrollo con nodemon.
-```
+> Crea cuenta de pruebas en [Ethereal Email](https://ethereal.email/create).
 
-```sh
-npm run start → Inicia el servidor en modo producción.
-```
+---
 
+## 📖 Documentación de la API
 
+[http://localhost:3000/api-docs](http://localhost:3000/api-docs)
 
-### 🚀 Tecnologías y dependencias principales
+---
 
-- express, mongoose, ejs, express-session, connect-mongo, bcrypt, jsonwebtoken, express-validator, multer, nodemailer, socket.io, i18n, cors, dotenv, swagger-jsdoc, swagger-ui-express, chance, morgan, debug, http-errors, cookie-parser, nodemon.
+## 📝 Licencia
 
-
-# 📄 Environment configuration
-
-> Rename the .env.example to .env and fill in the configuration fields with your configuration data:
-
-- PORT=PORT example -> 3000
-- NODEPOP_ENV=development
-- SECRET_SESSION=Here secret string
-- TIME_LIFE_SESSION=Here time in ms
-- MONGO_URI=Here path to mongodb
-- JWT_SECRET=Here Secret string
-
-## Etherial configuration email development
-- EMAIL_SERVICE_HOST=smtp.ethereal.email
-- EMAIL_SERVICE_PORT=587
-- EMAIL_SERVICE_SECURE=false
-- EMAIL_SERVICE_USER=create one from https://ethereal.email/create
-- EMAIL_SERVICE_PASSWORD=create one from https://ethereal.email/create
-- EMAIL_SERVICE_FROM=user@nodepop.com
-
-
-
-
-### 📖 Documentation
-
-Available in http://localhost:3000/api-docs
-
-### 📝 License
-
-> This project is private and for educational or personal use.
-
-> Enjoy programming with Nodepop! 🚀
+Uso privado y educativo.\
+¡Disfruta programando con Nodepop! 🚀
 
