@@ -7,10 +7,11 @@ export const index = async (req, res, next) => {
     const filterName = req.query.name;
     const filterPrice = req.query.price;
     const filterTags = req.query.tags;
-
-    const limit = parseInt(req.query.limit);
-    const skip = parseInt(req.query.skip);
     const sort = req.query.sort;
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
 
     const filter = {
       owner: userId,
@@ -27,6 +28,9 @@ export const index = async (req, res, next) => {
       filter.tags = filterTags;
     }
 
+    const totalProducts = await Product.countDocuments(filter);
+    const totalPages = Math.ceil(totalProducts / limit);
+
     const products = await Product.list(filter, limit, skip, sort);
     const uniqueTags = await Product.distinct("tags");
 
@@ -36,6 +40,9 @@ export const index = async (req, res, next) => {
       products,
       filter: { name: filterName, price: filterPrice, tags: filterTags, sort },
       uniqueTags,
+      currentPage: page,
+      totalPages,
+      limit,
     });
   } catch (error) {
     next(error);
