@@ -31,8 +31,6 @@ export const index = async (req, res, next) => {
     const totalProducts = await Product.countDocuments(filter);
     const totalPages = Math.ceil(totalProducts / limit);
 
-    if (page < 1 || page > totalPages) return next()
-
     const products = await Product.list(filter, limit, skip, sort);
     const uniqueTags = await Product.distinct("tags");
 
