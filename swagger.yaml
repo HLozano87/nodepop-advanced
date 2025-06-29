@@ -214,33 +214,38 @@ components:
         - name
         - price
         - tags
-
       properties:
+        _id:
+          type: string
+          example: "68610d63899cbaff67c9a0eb"
         name:
           type: string
-
+          example: "benasar"
+        owner:
+          type: string
+          example: "68610d63899cbaff67c9a0e6"
         price:
           type: number
-          format: number
+          format: float
           minimum: 1
+          example: 1548.08
         tags:
           type: array
           items:
             type: string
             enum: [work, mobile, motor, lifestyle]
-          example: ["motor", "lifestyle"]
-        image:
-          type: string
-          format: uri
-          example: "1750075050635-name.jpg"
+          example: ["mobile", "lifestyle", "motor", "work"]
+        __v:
+          type: integer
+          example: 0
         createdAt:
           type: string
           format: date-time
-          example: "2025-06-23T14:30:00.000Z"
+          example: "2025-06-29T09:54:43.698Z"
         updatedAt:
           type: string
           format: date-time
-          example: "2025-06-23T15:45:00.000Z"
+          example: "2025-06-29T09:54:43.698Z"
 
     SignUp:
       type: object

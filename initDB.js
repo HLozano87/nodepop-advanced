@@ -33,7 +33,7 @@ async function initDBNodepop(users) {
   console.log(`Delete ${products.deletedCount} products.`);
 
   const availableTags = Product.getTags();
-  const newProduct = Array.from({ length: 50 }, () => ({
+  const newProduct = Array.from({ length: 25 }, () => ({
     name: chance.word(),
     price: chance.floating({ min: 1, max: 3000 }).toFixed(2),
     tags: chance.pickset(

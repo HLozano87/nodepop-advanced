@@ -4,7 +4,13 @@ import { unlink } from "node:fs/promises";
 import { io } from "../webSocketServer.js";
 
 export const index = (req, res, next) => {
-  res.render("new-product");
+  const tags = Product.getTags()
+  res.render("new-product", {
+    tags,
+    oldInput: {},
+    errors: {},
+    message: "",
+  });
 };
 
 export const getProductDetail = async (req, res, next) => {

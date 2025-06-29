@@ -19,10 +19,14 @@
           type="text"
           id="name"
           name="name"
+          value="<%= oldInput?.name || '' %>"
           placeholder="iPhone 12"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:ring-2"
         />
+        <% if (errors?.name) { %>
+          <p class="text-sm text-red-600 mt-1"><%= __(errors.name.msg) %></p>
+        <% } %>
       </div>
 
       <div>
@@ -35,9 +39,13 @@
           name="price"
           step="0.01"
           placeholder="500"
+          value="<%= oldInput?.price || '' %>"
           required
           class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:ring-2"
         />
+        <% if (errors?.price) { %>
+          <p class="text-sm text-red-600 mt-1"><%= __(errors.price.msg) %></p>
+        <% } %>
       </div>
 
       <div>
@@ -48,14 +56,16 @@
           name="tags"
           id="tags"
           multiple
-          size="4"
           required
-          class="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          <option value="work"><%= __("work") %></option>
-          <option value="lifestyle"><%= __("lifestyle") %></option>
-          <option value="motor"><%= __("motor") %></option>
-          <option value="mobile"><%= __("mobile") %></option>
+          class="w-full border border-gray-300 rounded-md px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"        >
+          <% tags.forEach(tag => { %>
+              <option
+                value="<%= tag %>"
+                <%= oldInput && oldInput.tags && oldInput.tags.includes(tag) ? "selected" : "" %>
+              >
+                <%= __(tag) %>
+              </option>
+            <% }) %>
         </select>
         <p class="text-xs text-gray-500 mt-1">
           <%= __("Hold Ctrl (or Cmd) to select multiple tags") %>
