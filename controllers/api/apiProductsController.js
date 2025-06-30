@@ -135,7 +135,7 @@ export async function deleteProduct(req, res, next) {
 
     await Product.deleteOne({ _id: productId, owner: userId });
 
-    res.status(204).end();
+    res.status(200)
   } catch (error) {
     next(error);
   }

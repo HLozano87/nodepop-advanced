@@ -166,15 +166,18 @@ paths:
               properties:
                 name:
                   type: string
+                  example: benasar
                 price:
                   type: number
                   format: float
                   minimum: 1
+                  example: 1548.08
                 tags:
                   type: array
                   items:
                     type: string
                     enum: [work, mobile, motor, lifestyle]
+                  example: ["mobile", "work"]
                 image:
                   type: string
                   format: binary
@@ -182,12 +185,11 @@ paths:
         "200":
           description: Producto actualizado exitosamente
           content:
-            multipart-form:
+            application/json:
               schema:
                 $ref: "#/components/schemas/Product"
         "404":
           description: Producto no encontrado
-
     delete:
       summary: Eliminar un producto
       tags:
@@ -235,6 +237,12 @@ components:
             type: string
             enum: [work, mobile, motor, lifestyle]
           example: ["mobile", "lifestyle", "motor", "work"]
+        image:
+          type: string
+          example: "1688123456789-product-image.jpg"
+        thumbnail:
+          type: string
+          example: "1688123456789-product-image-thumbnail.jpg"
         __v:
           type: integer
           example: 0
