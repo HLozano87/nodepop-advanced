@@ -2,9 +2,11 @@ import Product from "../models/Product.js";
 import path from "node:path";
 import { unlink } from "node:fs/promises";
 import { io } from "../webSocketServer.js";
+import { createThumbnail } from "../lib/thumbnailConfigure.js";
+import createHttpError from "http-errors";
 
 export const index = (req, res, next) => {
-  const tags = Product.getTags()
+  const tags = Product.getTags();
   res.render("new-product", {
     tags,
     oldInput: {},
@@ -23,7 +25,7 @@ export const getProductDetail = async (req, res, next) => {
     }
 
     const product = await Product.findOne({ _id: productId, owner: userId });
-    
+
     if (!product) {
       return next();
     }
@@ -41,13 +43,17 @@ export const updateProductForm = async (req, res, next) => {
     const productId = req.params.productId;
     const userId = req.session.userId;
     const uniqueTags = await Product.distinct("tags");
+    const __ = res.__;
 
-    if (!productId) return next()
+    if (!productId) {
+      return next(createHttpError(400, __("error.validation")));
+    }
 
     const product = await Product.findOne({ _id: productId, owner: userId });
-    
-    if (!product) return next()
 
+    if (!product) {
+      return next(createHttpError(404, __("error.notFound")));
+    }
 
     res.render("update-product", { product, uniqueTags });
   } catch (error) {
@@ -62,10 +68,16 @@ export const createProduct = async (req, res, next) => {
     const userId = req.session.userId;
     const __ = res.__;
 
+    let thumbnail = null;
+    if (req.file) {
+      thumbnail = await createThumbnail(req.file);
+    }
+
     const product = new Product({
       name,
       price,
       image,
+      thumbnail,
       tags,
       owner: userId,
     });
@@ -131,7 +143,14 @@ export const deleteProduct = async (req, res, next) => {
         "uploads",
         product.image
       );
+      const thumbnail = path.join(
+        process.cwd(),
+        "public",
+        "uploads",
+        product.thumbnail
+      );
       await unlink(imagePath);
+      await unlink(thumbnail);
     }
 
     await Product.deleteOne({ _id: productId, owner: userId });

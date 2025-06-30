@@ -6,6 +6,7 @@ const productSchema = new Schema(
     owner: { type: Schema.Types.ObjectId, ref: "User", index: true },
     price: { type: Number, min: 1, required: true },
     image: { type: String },
+    thumbnail: { type: String },
     tags: { type: [String], required: true },
   },
   {
