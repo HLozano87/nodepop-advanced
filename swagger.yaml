@@ -49,20 +49,52 @@ paths:
 
   /api/products:
     get:
-      summary: Obtener todos los productos
+      summary: Obtener todos los productos con filtros opcionales
       tags:
         - products
       security:
         - Authorization: []
+      parameters:
+        - name: name
+          in: query
+          description: Filtra por nombre parcial (case-insensitive)
+          required: false
+          schema:
+            type: string
+        - name: priceMin
+          in: query
+          description: Precio mínimo
+          required: false
+          schema:
+            type: number
+        - name: priceMax
+          in: query
+          description: Precio máximo
+          required: false
+          schema:
+            type: number
+        - name: tags
+          in: query
+          description: Tags separados por comas
+          required: false
+          schema:
+            type: string
+        - name: owner
+          in: query
+          description: ID del usuario dueño del producto
+          required: false
+          schema:
+            type: string
       responses:
         "200":
-          description: Lista de productos
+          description: Lista de productos filtrados
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: "#/components/schemas/Product"
+
     post:
       summary: Crear un nuevo producto
       tags:
