@@ -58,5 +58,7 @@
 	"The product name contains invalid characters": "The product name contains invalid characters",
 	"Price must be a number greater than 0": "Price must be a number greater than 0",
 	"Page": "Page",
-	"to": "to"
+	"to": "to",
+	"Prev": "Prev",
+	"Next": "Next"
 }

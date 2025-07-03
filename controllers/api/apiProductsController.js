@@ -13,8 +13,19 @@ export async function listProducts(req, res, next) {
     if (req.query.price) filter.price = req.query.price;
     if (req.query.tags) filter.tags = { $in: req.query.tags.split(",") };
 
+    // Filtro de rango para price
+    if (req.query.priceMin || req.query.priceMax) {
+      filter.price = {};
+      if (req.query.priceMin) {
+        filter.price.$gte = parseFloat(req.query.priceMin);
+      }
+      if (req.query.priceMax) {
+        filter.price.$lte = parseFloat(req.query.priceMax);
+      }
+    }
+
     const limit = parseInt(req.query.limit || 10);
-    const skip = parseInt(req.query.skip || 0);
+    const skip = (parseInt(req.query.page) - 1) * parseInt(req.query.limit);
     const sort = req.query.sort;
     const fields = req.query.fields;
     const withCount = req.query.count === "true";
@@ -80,6 +91,7 @@ export async function newProduct(req, res, next) {
 }
 
 export async function updateProduct(req, res, next) {
+  // TODO REFACTOR
   try {
     const { productId } = req.params;
     const userId = req.userId;
@@ -88,19 +100,28 @@ export async function updateProduct(req, res, next) {
     if (!product) {
       return next(createHttpError(404, "Product not found"));
     }
-
-    Object.assign(product, req.body);
+    
+    const allowedFields = ["name", "description", "price", "tags"];
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) {
+        product[field] = req.body[field];
+      }
+    });
 
     if (req.file) {
       // Remove old image and thumbnail
       if (product.image) {
-        await unlink(path.join(process.cwd(), "public", "uploads", product.image)).catch(() => {});
+        await unlink(
+          path.join(process.cwd(), "public", "uploads", product.image)
+        ).catch(() => {});
       }
       if (product.thumbnail) {
-        await unlink(path.join(process.cwd(), "public", "uploads", product.thumbnail)).catch(() => {});
+        await unlink(
+          path.join(process.cwd(), "public", "uploads", product.thumbnail)
+        ).catch(() => {});
       }
 
-      product.image = req.file.filename;
+      product.image = req.file?.filename;
       product.thumbnail = await createThumbnail(req.file);
     }
 
@@ -127,15 +148,19 @@ export async function deleteProduct(req, res, next) {
     }
 
     if (product.image) {
-      await unlink(path.join(process.cwd(), "public", "uploads", product.image)).catch(() => {});
+      await unlink(
+        path.join(process.cwd(), "public", "uploads", product.image)
+      ).catch(() => {});
     }
     if (product.thumbnail) {
-      await unlink(path.join(process.cwd(), "public", "uploads", product.thumbnail)).catch(() => {});
+      await unlink(
+        path.join(process.cwd(), "public", "uploads", product.thumbnail)
+      ).catch(() => {});
     }
 
     await Product.deleteOne({ _id: productId, owner: userId });
 
-    res.status(200)
+    res.status(200);
   } catch (error) {
     next(error);
   }

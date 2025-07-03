@@ -79,12 +79,25 @@ paths:
           required: false
           schema:
             type: string
-        - name: owner
+        - name: sort
           in: query
-          description: ID del usuario dueño del producto
+          description: Sort by Name or price
           required: false
           schema:
             type: string
+        - name: page
+          in: query
+          description: page
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: limit
+          required: false
+          schema:
+            type: integer
+        
       responses:
         "200":
           description: Lista de productos filtrados

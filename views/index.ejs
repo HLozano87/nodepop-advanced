@@ -150,7 +150,7 @@
       <% if (currentPage > 1) { %>
         <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="px-4 py-2 bg-gray-200 rounded">◀</a>
       <% } else { %>
-        <span class="px-4 py-2 bg-gray-100 rounded text-gray-400">◀ Prev</span>
+        <span class="px-4 py-2 bg-gray-100 rounded text-gray-400">◀ <%= __("Prev") %></span>
       <% } %>
       <div class="flex gap-2">
         <% for (let i = 1; i <= totalPages; i++) { %>
@@ -164,7 +164,7 @@
       <% if (currentPage < totalPages) { %>
         <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="px-4 py-2 bg-gray-200 rounded">▶</a>
         <% } else { %>
-          <span class="px-4 py-2 bg-gray-100 rounded text-gray-400">Next ▶</span>
+          <span class="px-4 py-2 bg-gray-100 rounded text-gray-400"><%= __("Next") %> ▶</span>
           <% } %>
     </div>
       <p class="text-gray-600">
