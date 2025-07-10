@@ -15,7 +15,7 @@ export async function loginUser(req, res, next) {
     const { name, email, password, confirmPassword } = req.body;
     const redir = req.query.redir;
     const newAccount = req.query.newAccount === "true";
-    const __ = res.__
+    const __ = res.__;
 
     if (!email || !password) {
       res.locals.error = __("Email and password required.");
@@ -74,7 +74,7 @@ export async function logout(req, res, next) {
   const oldSessionId = req.session.id;
   try {
     const userId = req.session.userId;
-    const __ = res.__
+    const __ = res.__;
     const user = await User.findById(userId);
     const regenerate = promisify(req.session.regenerate).bind(req.session);
     await regenerate();

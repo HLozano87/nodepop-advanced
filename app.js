@@ -16,8 +16,8 @@ import { corsOptions } from "./lib/corsConfigure.js";
 import swaggerMiddleware from "./lib/swaggerMiddleware.js";
 import changeLang from "./controllers/langLocaleController.js";
 
-import webRoutes from "./routes/webRoutes.js"
-import apiRoutes from "./routes/apiRoutes.js"
+import webRoutes from "./routes/webRoutes.js";
+import apiRoutes from "./routes/apiRoutes.js";
 
 await connectMongoose();
 console.log("Connected to MongoDB");
@@ -57,7 +57,7 @@ app.get("/lang-change/:locale", changeLang);
 /**
  * Routes
  */
-app.use("/api", apiRoutes)
+app.use("/api", apiRoutes);
 app.use("/", webRoutes);
 app.use("/api-docs", swaggerMiddleware);
 
