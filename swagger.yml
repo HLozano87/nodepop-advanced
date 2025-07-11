@@ -40,9 +40,7 @@ paths:
                 email:
                   type: string
                   example: string
-                password:
-                  type: string
-                  example: string
+
       responses:
         "200":
           description: ""
@@ -322,7 +320,6 @@ components:
       properties:
         email:
           type: string
-
         password:
           type: string
 

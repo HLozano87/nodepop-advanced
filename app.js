@@ -70,6 +70,11 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
   // Manage validation errors
   const __ = res.__;
   if (err.array) {
@@ -86,8 +91,7 @@ app.use(function (err, req, res, next) {
 
   // For API errors response must be JSON
   if (req.url.startsWith("/api/")) {
-    res.json({ error: __(err.message) });
-    return;
+    return res.json({ error: err.message });
   }
 
   // set locals, only providing error in development
@@ -95,7 +99,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = process.env.NODEPOP_ENV === "development" ? err : {};
 
   // render the error page
-  res.render("error");
+  return res.render("error");
 });
 
 export default app;

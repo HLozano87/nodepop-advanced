@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken";
+import { promisify } from "node:util";
 import User from "../../models/User.js";
 import createError from "http-errors";
 
@@ -22,14 +23,16 @@ export async function signUp(req, res, next) {
     });
     await newUser.save();
 
-    // const userData = newUser.toObject()
-    // delete userData.password
+    const userData = newUser.toObject()
+    delete userData.password
 
-    res.status(201).json({ result: newUser });
+    return res.status(201).json({ result: userData });
   } catch (error) {
     next(error);
   }
 }
+
+const signJWT = promisify(jwt.sign);
 
 export async function loginAuthJWT(req, res, next) {
   try {
@@ -41,19 +44,12 @@ export async function loginAuthJWT(req, res, next) {
       return;
     }
 
-    jwt.sign(
+    const tokenJWT = await signJWT(
       { user_id: user._id },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "5d",
-      },
-      (err, tokenJWT) => {
-        if (err) {
-          return next(err);
-        }
-        res.json({ tokenJWT });
-      }
+      { expiresIn: "5d" }
     );
+    return res.json({ tokenJWT });
   } catch (error) {
     next(error);
   }
