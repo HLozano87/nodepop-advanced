@@ -37,7 +37,7 @@ export async function listProducts(req, res, next) {
       result.count = await Product.countDocuments(filter);
     }
 
-    res.json(result);
+    return res.json(result);
   } catch (error) {
     next(error);
   }
@@ -54,7 +54,7 @@ export async function getProduct(req, res, next) {
       return next(createHttpError(404, "Product not found"));
     }
 
-    res.json({ result: product });
+    return res.json({ result: product });
   } catch (error) {
     next(error);
   }
@@ -63,7 +63,7 @@ export async function getProduct(req, res, next) {
 export function getTags(req, res, next) {
   try {
     const tags = Product.getTags();
-    res.json({ result: tags });
+    return res.json({ result: tags });
   } catch (error) {
     next(error);
   }
@@ -84,7 +84,7 @@ export async function newProduct(req, res, next) {
     }
 
     const saved = await product.save();
-    res.status(201).json({ result: saved });
+    return res.status(201).json({ result: saved });
   } catch (error) {
     next(error);
   }
@@ -126,7 +126,7 @@ export async function updateProduct(req, res, next) {
     }
 
     const updated = await product.save();
-    res.json({ result: updated });
+    return res.json({ result: updated });
   } catch (error) {
     next(error);
   }
@@ -160,7 +160,7 @@ export async function deleteProduct(req, res, next) {
 
     await Product.deleteOne({ _id: productId, owner: userId });
 
-    res.status(200);
+    return res.status(200).json();
   } catch (error) {
     next(error);
   }
