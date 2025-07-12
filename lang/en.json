@@ -44,14 +44,14 @@
 	"Current Image": "Current Image",
 	"Edit": "Edit",
 	"Edit Product": "Edit Product",
-	"Welcome back to Nodepop, %s!": "Welcome back to Nodepop, %s!",
+	"Welcome back to Nodepop, {{name}}!": "Welcome back to Nodepop, {{name}}!",
+	"See you soon, {{name}}!": "See you soon, {{name}}!",
 	"Passwords not match.": "Passwords not match.",
 	"Credentials not valid.": "Credentials not valid.",
 	"Email and password required.": "Email and password required.",
-	"See you soon, %s!": "See you soon, %s!",
-	"%s was create successfully": "%s created successfully",
-	"%s was update successfully": "%s updated successfully",
-	"%s was delete successfully": "%s was delete successfully",
+	"{{name}} was create successfully": "{{name}} created successfully",
+	"{{name}} was update successfully": "{{name}} updated successfully",
+	"{{name}} was delete successfully": "{{name}} was delete successfully",
 	"Filter by name": "Filter by name",
 	"Filter by price": "Filter by price",
 	"No Image Available": "No Image Available",
@@ -60,5 +60,6 @@
 	"Page": "Page",
 	"to": "to",
 	"Prev": "Prev",
-	"Next": "Next"
+	"Next": "Next",
+	"Not Found": "Not Found"
 }

@@ -30,7 +30,7 @@
 	"Hold Ctrl (or Cmd) to select multiple tags": "Mantenga pulsada la tecla Ctrl (o Cmd) para seleccionar varias etiquetas",
 	"Back to home": "Volver a inicio",
 	"error": {
-		"notFound": "No encontrado",
+		"notFound": "No se encuentra",
 		"internal": "Error interno del servidor",
 		"validation": "Solicitud no válida"
 	},
@@ -44,14 +44,14 @@
 	"Current Image": "Imagen Actual",
 	"Edit": "Editar",
 	"Edit Product": "Editar Producto",
-	"Welcome back to Nodepop, %s!": "Bienvenido de nuevo a Nodepop, %s!",
+	"Welcome back to Nodepop, {{name}}!": "Bienvenido de nuevo a Nodepop, {{name}}!",
+	"See you soon, {{name}}!": "Hasta pronto, {{name}}!",
 	"Passwords not match.": "Las contraseñas no coinciden.",
 	"Credentials not valid.": "Credenciales no válidas.",
 	"Email and password required.": "Correo y contraseña requeridos.",
-	"See you soon, %s!": "Hasta pronto, %s!",
-	"%s was create successfully": "%s se ha creado correctamente",
-	"%s was update successfully": "%s se ha actualizado correctamente",
-	"%s was delete successfully": "%s se ha eliminado correctamente",
+	"{{name}} was create successfully": "{{name}} se ha creado correctamente",
+	"{{name}} was update successfully": "{{name}} se ha actualizado correctamente",
+	"{{name}} was delete successfully": "{{name}} se ha eliminado correctamente",
 	"Filter by name": "Filtrar por nombre",
 	"Filter by price": "Filtrar por precio",
 	"No Image Available": "No hay imagen disponible",
@@ -60,5 +60,6 @@
 	"Page": "Página",
 	"to": "de",
 	"Prev": "Anterior",
-	"Next": "Siguiente"
+	"Next": "Siguiente",
+	"Not Found": "No se encuentra"
 }

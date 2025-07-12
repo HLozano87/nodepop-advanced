@@ -59,7 +59,7 @@ export async function loginUser(req, res, next) {
     setTimeout(() => {
       io.to(req.session.id).emit(
         "login",
-        __('Welcome back to Nodepop, %s!', user.name)
+        __("Welcome back to Nodepop, {{name}}!", { name: user.name })
       );
     }, 500);
 
@@ -76,10 +76,15 @@ export async function logout(req, res, next) {
     const userId = req.session.userId;
     const __ = res.__;
     const user = await User.findById(userId);
+    req.session.userId = user.id;
+    req.session.name = user.name;
     const regenerate = promisify(req.session.regenerate).bind(req.session);
     await regenerate();
 
-    io.to(oldSessionId).emit("logout", __('See you soon, %s!', user.name));
+    io.to(oldSessionId).emit(
+      "logout",
+      __("See you soon, {{name}}!", { name: user.name })
+    );
     io.in(oldSessionId).disconnectSockets(true);
 
     setTimeout(() => {

@@ -64,7 +64,7 @@ app.use("/api-docs", swaggerMiddleware);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = createError(404);
-  err.message = "error.notFound";
+  err.message = "Not Found";
   next(err);
 });
 
@@ -88,12 +88,10 @@ app.use(function (err, req, res, next) {
   }
 
   res.status(err.status || 500);
-
   // For API errors response must be JSON
   if (req.url.startsWith("/api/")) {
     return res.json({ error: err.message });
   }
-
   // set locals, only providing error in development
   res.locals.message = __(err.message);
   res.locals.error = process.env.NODEPOP_ENV === "development" ? err : {};

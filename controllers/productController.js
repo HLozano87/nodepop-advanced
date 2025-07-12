@@ -86,7 +86,7 @@ export const createProduct = async (req, res, next) => {
     setTimeout(() => {
       io.to(req.session.id).emit(
         "create-product",
-        __("%s was create successfully", product.name)
+        __("{{name}} was create successfully", { name: product.name })
       );
     }, 1000);
 
@@ -101,7 +101,7 @@ export const updateProduct = async (req, res, next) => {
     const productId = req.params.productId;
     const userId = req.session.userId;
     const __ = req.__;
-
+    
     const productData = {
       name: req.body.name,
       price: req.body.price,
@@ -120,7 +120,7 @@ export const updateProduct = async (req, res, next) => {
     setTimeout(() => {
       io.to(req.session.id).emit(
         "create-product",
-        __("%s was update successfully", updatedProduct.name)
+        __("{{name}} was update successfully", { name: updatedProduct.name })
       );
     }, 1000);
     res.redirect("/");
@@ -158,7 +158,7 @@ export const deleteProduct = async (req, res, next) => {
     setTimeout(() => {
       io.to(req.session.id).emit(
         "delete-product",
-        __("%s was delete successfully", product.name)
+        __("{{name}} was delete successfully", { name: product.name })
       );
     }, 1000);
 
