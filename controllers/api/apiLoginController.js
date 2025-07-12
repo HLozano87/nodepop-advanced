@@ -23,8 +23,8 @@ export async function signUp(req, res, next) {
     });
     await newUser.save();
 
-    const userData = newUser.toObject()
-    delete userData.password
+    const userData = newUser.toObject();
+    delete userData.password;
 
     return res.status(201).json({ result: userData });
   } catch (error) {
