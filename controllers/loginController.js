@@ -7,13 +7,14 @@ export const index = (req, res, next) => {
   res.locals.name = "";
   res.locals.email = "";
   res.locals.newAccount = req.query.newAccount === "true";
+  res.locals.redir = req.query.redir || "";
   res.render("login");
 };
 
 export async function loginUser(req, res, next) {
   try {
     const { name, email, password, confirmPassword } = req.body;
-    const redir = req.query.redir;
+    const redir = (req.body.redir || req.query.redir || "/").trim();
     const newAccount = req.query.newAccount === "true";
     const __ = res.__;
 
@@ -21,6 +22,7 @@ export async function loginUser(req, res, next) {
       res.locals.error = __("Email and password required.");
       res.locals.email = "";
       res.locals.newAccount = newAccount;
+      res.locals.redir = redir;
       return res.render("login");
     }
 
@@ -31,6 +33,7 @@ export async function loginUser(req, res, next) {
         res.locals.name = name;
         res.locals.email = email;
         res.locals.newAccount = true;
+        res.locals.redir = redir;
         return res.render("login");
       }
       const user = new User({
@@ -45,25 +48,33 @@ export async function loginUser(req, res, next) {
       return res.redirect("/");
     }
 
+    // Login
     const user = await User.findOne({ email: email });
 
     if (!user || !(await user.comparePassword(password))) {
       res.locals.error = __("Credentials not valid.");
       res.locals.email = email;
       res.locals.newAccount = false;
+      res.locals.redir = redir;
       return res.render("login");
     }
+    
     req.session.userId = user.id;
     req.session.name = user.name;
 
-    setTimeout(() => {
-      io.to(req.session.id).emit(
-        "login",
-        __("Welcome back to Nodepop, {{name}}!", { name: user.name })
-      );
-    }, 500);
+    req.session.save((err) => {
+      if (err) return next(err);
 
-    res.redirect(redir ? redir : "/");
+      setTimeout(() => {
+        io.to(req.session.id).emit(
+          "login",
+          __("Welcome back to Nodepop, {{name}}!", { name: user.name })
+        );
+      }, 500);
+
+      res.redirect(redir ? redir : "/");
+    });
+
   } catch (error) {
     next(error);
     return;
@@ -76,15 +87,13 @@ export async function logout(req, res, next) {
     const userId = req.session.userId;
     const __ = res.__;
     const user = await User.findById(userId);
-    req.session.userId = user.id;
-    req.session.name = user.name;
-    const regenerate = promisify(req.session.regenerate).bind(req.session);
-    await regenerate();
 
     io.to(oldSessionId).emit(
       "logout",
       __("See you soon, {{name}}!", { name: user.name })
     );
+    const regenerate = promisify(req.session.regenerate).bind(req.session);
+    await regenerate();
     io.in(oldSessionId).disconnectSockets(true);
 
     setTimeout(() => {
