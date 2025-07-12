@@ -1,10 +1,13 @@
 {
   "name": "nodepop",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
+  "description": "Nodepop - Backend Practice Marketplace",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start:prod": "cross-env NODEPOP_ENV=production node server.js",
+    "dev": "cross-env NODEPOP_ENV=development node server.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "initDB": "node initDB.js"
