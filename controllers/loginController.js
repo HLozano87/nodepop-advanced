@@ -58,23 +58,26 @@ export async function loginUser(req, res, next) {
       res.locals.redir = redir;
       return res.render("login");
     }
-    
+
     req.session.userId = user.id;
     req.session.name = user.name;
+
+    const username = req.session.name;
+    const sessionId = req.session.id;
 
     req.session.save((err) => {
       if (err) return next(err);
 
       setTimeout(() => {
-        io.to(req.session.id).emit(
-          "login",
-          __("Welcome back to Nodepop, {{name}}!", { name: user.name })
-        );
-      }, 500);
+        const welcomeMessage = __("Welcome back to Nodepop, {{name}}!", {
+          name: username,
+        });
+
+        io.to(sessionId).emit("login", welcomeMessage);
+      }, 1500);
 
       res.redirect(redir ? redir : "/");
     });
-
   } catch (error) {
     next(error);
     return;
