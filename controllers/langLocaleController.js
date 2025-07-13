@@ -3,7 +3,8 @@ function changeLang(req, res, next) {
   res.cookie("nodepop-lang", lang, {
     maxAge: 1000 * 60 * 60 * 24 * 30,
   });
-  res.redirect("back");
+  const back = req.get("Referer") || "/";
+  res.redirect(back);
 }
 
 export default changeLang;
