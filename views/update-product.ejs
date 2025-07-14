@@ -80,15 +80,22 @@
               <input 
                 type="checkbox"
                 name="tags"
-                required
                 value="<%= tag %>"
                 <%= product.tags.includes(tag) ? 'checked' : '' %>
                 class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               >
-              <span class="text-gray-700 text-sm capitalize"><%= tag %></span>
+              <span class="text-gray-700 text-sm"><%= tag %></span>
             </label>
           <% }) %>
         </div>
+        <div id="tagsError" class="text-red-600 text-sm mt-2 hidden">
+          <%= __("You must select at least one tag.") %>
+        </div>
+        <% if (typeof errors !== 'undefined' && errors.tags) { %>
+          <div class="text-red-600 text-sm mt-2">
+            <%= errors.tags %>
+          </div>
+        <% } %>
       </div>
 
       <div class="flex justify-between items-center">
