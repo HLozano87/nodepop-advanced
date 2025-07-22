@@ -22,6 +22,7 @@ import apiRoutes from "./routes/apiRoutes.js";
 await connectMongoose();
 console.log("Connected to MongoDB");
 const app = express();
+app.disable('x-powered-by');
 
 // view engine setup
 app.set("views", "views");
