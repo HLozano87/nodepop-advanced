@@ -1,4 +1,18 @@
 const socket = io();
+// WIP TOAST
+// socket.on("connect", () => {
+//   fetch("/session-login")
+//     .then((res) => res.json())
+//     .then(({ message }) => {
+//       if (message) showToast(message, "success");
+//     });
+
+//   fetch("/session-logout")
+//     .then((res) => res.json())
+//     .then(({ message }) => {
+//       if (message) showToast(message, "info");
+//     });
+// });
 
 function showToast(msg, type = "success") {
   const colors = {

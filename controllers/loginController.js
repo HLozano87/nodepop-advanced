@@ -33,7 +33,6 @@ export async function loginUser(req, res, next) {
         res.locals.name = name;
         res.locals.email = email;
         res.locals.newAccount = true;
-        res.locals.redir = redir;
         return res.render("login");
       }
       const user = new User({
@@ -63,21 +62,16 @@ export async function loginUser(req, res, next) {
     req.session.name = user.name;
 
     const username = req.session.name;
-    const sessionId = req.session.id;
-
-    req.session.save((err) => {
-      if (err) return next(err);
-
-      setTimeout(() => {
-        const welcomeMessage = __("Welcome back to Nodepop, {{name}}!", {
-          name: username,
-        });
-
-        io.to(sessionId).emit("login", welcomeMessage);
-      }, 1500);
-
-      res.redirect(redir ? redir : "/");
+    const welcomeMessage = __(`Welcome back to Nodepop ${user.name}!`, {
+      name: username,
     });
+    req.session.welcomeMessage = welcomeMessage;
+    io.to(user.id).emit("session-login", welcomeMessage)
+
+    // req.session.save((err) => {
+    //   if (err) return next(err);
+    // });
+    res.redirect(redir ? redir : "/");
   } catch (error) {
     next(error);
     return;
@@ -90,18 +84,15 @@ export async function logout(req, res, next) {
     const userId = req.session.userId;
     const __ = res.__;
     const user = await User.findById(userId);
+    const logoutMessage = __("See you soon, {{name}}!", { name: user.name });
+    req.session.logoutMessage = logoutMessage;
+    io.to(oldSessionId).emit("session-logout", logoutMessage);
 
-    io.to(oldSessionId).emit(
-      "logout",
-      __("See you soon, {{name}}!", { name: user.name })
-    );
+
     const regenerate = promisify(req.session.regenerate).bind(req.session);
     await regenerate();
-    io.in(oldSessionId).disconnectSockets(true);
 
-    setTimeout(() => {
-      res.redirect("login");
-    }, 800);
+    res.redirect("login");
   } catch (error) {
     next(error);
   }
