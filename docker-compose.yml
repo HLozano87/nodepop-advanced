@@ -1,0 +1,23 @@
+services:
+  mongo:
+    image: mongo:8.0
+    container_name: nodepop-db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - nodepop-db:/data/db
+
+  nodepop:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/nodepop
+
+volumes:
+  nodepop-db:

@@ -50,6 +50,13 @@ docker run --name mongodb -d -p 27017:27017 -v ~/data/db:/data/db mongo:8.0
 
 ---
 
+## Montar imagen en local con Docker
+
+```bash
+docker-compose up --build
+```
+si lo prefieres para dejar la terminal libre puedes usar la opción -d o --detachd
+
 ## 🚀 Primer despliegue de Nodepop
 
 1. Renombra `env_tmp` a `.env` y configura tus variables de entorno.

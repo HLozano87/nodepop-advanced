@@ -1,0 +1,33 @@
+# Dependencias
+node_modules
+
+# Entorno
+.env
+.env.example
+
+# Logs
+*.log
+logs/
+
+# Base de datos local (si tienes)
+data/
+
+# Uploads locales (si tienes)
+public/uploads/
+
+# Git y configuración
+.git
+.gitignore
+README.md
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# IDE
+.vscode/
+.DS_Store
+
+# Tests
+coverage/
