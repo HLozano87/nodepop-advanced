@@ -43,7 +43,7 @@ export async function loginUser(req, res, next) {
       });
       await user.save();
       req.session.userId = user.id;
-      user.sendEmail("Bienvenido", `Bienvenido a Nodepop ${user.name}.`);
+      // user.sendEmail("Bienvenido", `Bienvenido a Nodepop ${user.name}.`);
       return res.redirect("/");
     }
 
@@ -66,11 +66,11 @@ export async function loginUser(req, res, next) {
       name: username,
     });
     req.session.welcomeMessage = welcomeMessage;
-    io.to(user.id).emit("session-login", welcomeMessage)
-
-    // req.session.save((err) => {
-    //   if (err) return next(err);
-    // });
+    
+    req.session.save((err) => {
+      io.to(user.id).emit("session-login", welcomeMessage)
+      if (err) return next(err);
+    });
     res.redirect(redir ? redir : "/");
   } catch (error) {
     next(error);
